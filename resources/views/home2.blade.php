@@ -36,6 +36,8 @@
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                 <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
                                     {{ number_format($cafe->hargaMax) }}</p>
+                                <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
+                                    {{$cafe->jam_tutup}} </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
                                     Detail</a>
                             </div>

@@ -97,5 +97,4 @@ class CafeController extends Controller
         return view('home2', compact('cafes'));
     }
 
-
 }
