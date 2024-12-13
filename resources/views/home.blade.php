@@ -18,10 +18,52 @@
         font-size: 16px;
         border-radius: 8px;
     }
+
+    #carouselExampleIndicators .carousel-item img {
+        width: 50%;
+        /* Mengatur lebar gambar agar mengikuti lebar kontainer */
+        height: 200px;
+        /* Mengatur tinggi gambar agar lebih konsisten */
+        object-fit: cover;
+        /* Menyesuaikan gambar agar tidak pecah atau terdistorsi */
+    }
+   
 </style>
 @section('content')
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="images\cafe1.jpeg" class="d-block w-100" alt="Image 1">
+        </div>
+        <div class="carousel-item">
+            <img src="images\cafe2.jpeg" class="d-block w-100" alt="Image 2">
+        </div>
+        <div class="carousel-item">
+            <img src="images\jogja.jpeg" class="d-block w-100" alt="Image 3">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
 <div class="container">
-    <h2>Cari Cafe Sesuai Kebutuhan Anda</h2>
+    <h2 style="text-align: center; font-weight: bold;">Cari Cafe Sesuai Kebutuhan Anda</h2>
     <form action="/recommend" method="GET" class="filter-form">
         <!-- Lokasi Berdasarkan Geolokasi -->
         <div class="form-group">
@@ -82,7 +124,8 @@
                                 <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                 <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
-                                    {{ number_format($cafe->hargaMax) }}</p>
+                                    {{ number_format($cafe->hargaMax) }}
+                                </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
                                     Detail</a>
                             </div>
@@ -108,7 +151,8 @@
                                 <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                 <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
-                                    {{ number_format($cafe->hargaMax) }}</p>
+                                    {{ number_format($cafe->hargaMax) }}
+                                </p>
                                 <p class="card-text"><strong>Jam Buka:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
                                 </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
