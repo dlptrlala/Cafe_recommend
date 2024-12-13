@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Cafe;
+use Carbon\Carbon;
 
 class CafeController extends Controller
 {
@@ -75,62 +76,69 @@ class CafeController extends Controller
 
     // Rekomendasi cafe berdasarkan filter
     public function recommend(Request $request)
-{
-    // Validasi input dari user
-    $validated = $request->validate([
-        'longitude' => 'nullable|numeric',
-        'latitude' => 'nullable|numeric',
-        'lokasi_area' => 'nullable|string',
-        'harga_min' => 'nullable|integer|min:0',
-        'harga_max' => 'nullable|integer|min:0',
-        'kebutuhan' => 'nullable|string',
-    ]);
+    {
+        // Validasi input dari user
+        $validated = $request->validate([
+            'longitude' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+            'lokasi_area' => 'nullable|string',
+            'harga_min' => 'nullable|integer|min:0',
+            'harga_max' => 'nullable|integer|min:0',
+            'kebutuhan' => 'nullable|string',
+        ]);
 
-    // Ambil data filter
-    $longitude = $validated['longitude'] ?? null;
-    $latitude = $validated['latitude'] ?? null;
-    $lokasi_area = $validated['lokasi_area'] ?? null;
-    $harga_min = $validated['harga_min'] ?? 0;
-    $harga_max = $validated['harga_max'] ?? PHP_INT_MAX; // Default: tidak ada batas atas
-    $kebutuhan = $validated['kebutuhan'] ?? null;
+        // Ambil data filter
+        $longitude = $validated['longitude'] ?? null;
+        $latitude = $validated['latitude'] ?? null;
+        $lokasi_area = $validated['lokasi_area'] ?? null;
+        $harga_min = $validated['harga_min'] ?? 0;
+        $harga_max = $validated['harga_max'] ?? PHP_INT_MAX; // Default: tidak ada batas atas
+        $kebutuhan = $validated['kebutuhan'] ?? null;
 
-    // Query dasar
-    $query = Cafe::query();
+        // Ambil waktu saat ini
+        $currentTime = Carbon::now()->format('H:i');
 
-    // Filter berdasarkan lokasi area (kecuali "Semua Lokasi")
-    if ($lokasi_area && $lokasi_area !== "Semua Lokasi" && $lokasi_area !== "geo") {
-        $query->where('lokasi_area', $lokasi_area);
-    }
+        // Query dasar
+        $query = Cafe::query();
 
-    // Filter berdasarkan harga
-    $query->where('hargaMin', '>=', $harga_min)
-        ->where('hargaMax', '<=', $harga_max);
+        // Filter berdasarkan lokasi area (kecuali "Semua Lokasi")
+        if ($lokasi_area && $lokasi_area !== "Semua Lokasi" && $lokasi_area !== "geo") {
+            $query->where('lokasi_area', $lokasi_area);
+        }
 
-    // Filter berdasarkan kebutuhan
-    if ($kebutuhan) {
-        $query->where("kebutuhan->$kebutuhan", true);
-    }
+        // Filter berdasarkan harga
+        $query->where('hargaMin', '>=', $harga_min)
+            ->where('hargaMax', '<=', $harga_max);
 
-    // Filter berdasarkan geolokasi (jika ada)
-    if ($longitude && $latitude) {
-        $radius = 5000; // Radius pencarian dalam meter (5 km)
-        $query->selectRaw(
-            "*, (6371000 * acos(
+        // Filter berdasarkan kebutuhan
+        if ($kebutuhan) {
+            $query->where("kebutuhan->$kebutuhan", true);
+        }
+
+        // Filter berdasarkan geolokasi (jika ada)
+        if ($longitude && $latitude) {
+            $radius = 5000; // Radius pencarian dalam meter (5 km)
+            $query->selectRaw(
+                "*, (6371000 * acos(
                 cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + 
                 sin(radians(?)) * sin(radians(latitude))
             )) AS distance",
-            [$latitude, $longitude, $latitude]
-        )
-        ->having('distance', '<=', $radius)
-        ->orderBy('distance', 'asc');
+                [$latitude, $longitude, $latitude]
+            )
+                ->having('distance', '<=', $radius)
+                ->orderBy('distance', 'asc');
+        }
+
+        // // Filter berdasarkan jam buka
+        // $query->where('jam_buka', '<=', $currentTime)
+        //     ->where('jam_tutup', '>', $currentTime);
+
+        // Eksekusi query
+        $cafes = $query->get();
+
+        // Kembalikan data ke view
+        return view('home2', compact('cafes'));
     }
-
-    // Eksekusi query
-    $cafes = $query->get();
-
-    // Kembalikan data ke view
-    return view('home2', compact('cafes'));
-}
 
     // public function recommend(Request $request)
     // {

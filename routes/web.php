@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('auth.login');
 });
 use App\Http\Controllers\AuthController;
 Route::get('/register', [AuthController::class, 'register'])->name('register');

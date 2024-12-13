@@ -81,7 +81,8 @@
                                 <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
                                 <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - {{ number_format($cafe->hargaMax) }}</p>
+                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
+                                    {{ number_format($cafe->hargaMax) }}</p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
                                     Detail</a>
                             </div>
@@ -93,6 +94,35 @@
             <p>Tidak ada cafe yang ditemukan sesuai dengan filter yang Anda pilih.</p>
         @endif
     </div>
+    <!-- Daftar Cafe yang Buka -->
+    <div class="search-results mt-4">
+        <h3>Daftar Cafe yang Buka:</h3>
+        <div class="row">
+            @if(isset($cafes) && count($cafes) > 0)
+                @foreach($cafes as $cafe)
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                                <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                                <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
+                                    {{ number_format($cafe->hargaMax) }}</p>
+                                <p class="card-text"><strong>Jam Buka:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                </p>
+                                <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
+                                    Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <p>Tidak ada cafe yang buka pada saat ini.</p>
+            @endif
+        </div>
+    </div>
+
 </div>
 
 <script>

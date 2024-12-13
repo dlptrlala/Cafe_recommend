@@ -50,13 +50,20 @@
         color: #333;
         font-size: 1.2rem;
     }
+
+    .fa-mug-saucer {
+        transform: scaleX(-1);
+        /* Membalik secara horizontal */
+        transform: scaleY(-1);
+        /* Membalik secara vertikal */
+        display: inline-block;
+    }
 </style>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="{{ route('home') }}">
-            <span>Caffe</span><span class="highlight"><span>.i</span><i class="fa-solid fa-mug-saucer"
-                    style="transform: rotate(180deg); display: inline-block;"></i></span>
+            <span>Caffe</span><span class="highlight"><span>.i</span><i class="fa-solid fa-mug-saucer"></i></span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

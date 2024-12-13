@@ -16,12 +16,17 @@
             <p><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
             <p><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp {{ number_format($cafe->hargaMax) }}
             </p>
-            <p><strong>Kebutuhan:</strong>
-                {{ implode(', ', array_map('ucfirst', array_keys(array_filter($cafe->kebutuhan)))) }}
-            </p>
-            <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
             <p><strong>Jam Buka:</strong> {{ $cafe->jam_buka }}</p>
             <p><strong>Jam Tutup:</strong> {{ $cafe->jam_tutup }}</p>
+            <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
+
+            <!-- Tambahkan kebutuhan di bawah deskripsi -->
+            <p><strong>Kebutuhan:</strong></p>
+            <p>
+                @foreach(array_keys(array_filter($cafe->kebutuhan)) as $kebutuhan)
+                    <span>#{{ strtolower($kebutuhan) }}</span>
+                @endforeach
+            </p>
         </div>
     </div>
 </div>
