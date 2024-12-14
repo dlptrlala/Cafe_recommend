@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Cafe;
+use App\Models\Review;
 use Carbon\Carbon;
 
 class CafeController extends Controller
@@ -15,11 +17,13 @@ class CafeController extends Controller
     }
     public function show($id)
     {
-        // Menemukan cafe berdasarkan ID
-        $cafe = Cafe::findOrFail($id);
+        $cafe = Cafe::with('reviews')->findOrFail($id);
 
-        // Menampilkan view detail cafe
-        return view('detail', compact('cafe'));
+        // Menghitung rata-rata rating cafe
+        $averageRating = $cafe->reviews->avg('rating');
+
+        // Menampilkan detail cafe beserta rata-rata rating
+        return view('detail', compact('cafe', 'averageRating'));
     }
 
 
@@ -155,6 +159,23 @@ class CafeController extends Controller
             return 'dini hari';
         }
     }
+    public function storeReview(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string',
+        ]);
 
+        Review::create([
+            'idCafe' => $id,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'rating' => $validated['rating'],
+            'review' => $validated['review'],
+        ]);
 
+        return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
+    }
 }

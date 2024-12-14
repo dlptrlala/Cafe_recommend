@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'loginProcess'])->name('loginProce
 use App\Http\Controllers\CafeController;
 Route::get('/recommend', [CafeController::class, 'recommend']);
 Route::get('/cafe/{id}', [CafeController::class, 'show'])->name('cafe.details');
+Route::post('/cafe/{id}/review', [CafeController::class, 'storeReview'])->name('cafe.review.store');
 // Rekomendasi context-aware (waktu), untuk homepage
 Route::get('/', [CafeController::class, 'recommendByTimeContext'])->name('home');
 Route::get('/home', [CafeController::class, 'recommendByTimeContext'])->name('home');
