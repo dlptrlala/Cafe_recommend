@@ -1,4 +1,8 @@
 @extends('layout.navbar')
+
+<head>
+    <title>Home</title>
+</head>
 <style>
     .form-group {
         margin-bottom: 20px;
@@ -64,75 +68,13 @@
             </select>
         </div>
 
-        <!-- Pilih Waktu -->
-        <div class="form-group">
-            <label for="pilihWaktu">Pilih Waktu:</label>
-            <select name="pilihWaktu" id="pilihWaktu" class="form-control" onchange="toggleJamInput()">
-                <option value="sekarang">Waktu Saat Ini</option>
-                <option value="pilihJam">Pilih Jam</option>
-            </select>
-        </div>
-
-        <!-- Rentang Waktu -->
-        <div class="form-group" id="jamBukaGroup" style="display:none;">
-            <label for="jamBuka">Jam Buka:</label>
-            <input type="time" name="jamBuka" id="jamBuka" class="form-control" placeholder="Jam Buka" value="00:00">
-        </div>
-
-        <div class="form-group" id="jamTutupGroup" style="display:none;">
-            <label for="jamTutup">Jam Tutup:</label>
-            <input type="time" name="jamTutup" id="jamTutup" class="form-control" placeholder="Jam Tutup" value="23:59">
-        </div>
-
-        <script>
-            function toggleJamInput() {
-                var waktuOption = document.getElementById('pilihWaktu').value;
-
-                if (waktuOption === 'pilihJam') {
-                    // Menampilkan input waktu
-                    document.getElementById('jamBukaGroup').style.display = 'block';
-                    document.getElementById('jamTutupGroup').style.display = 'block';
-                } else {
-                    // Menyembunyikan input waktu
-                    document.getElementById('jamBukaGroup').style.display = 'none';
-                    document.getElementById('jamTutupGroup').style.display = 'none';
-                }
-            }
-        </script>
-
         <!-- Submit Button -->
         <button type="submit" class="btn btn-success">Cari Cafe</button>
     </form>
 
-    <!-- Hasil Pencarian -->
-    <div class="search-results mt-4">
-        @if(isset($cafes) && count($cafes) > 0)
-        <h3>Hasil Pencarian:</h3>
-        <div class="row">
-            @foreach($cafes as $cafe)
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                        <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                        <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
-                                    {{ number_format($cafe->hargaMax) }}</p>
-                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
-                            Detail</a>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-        @else
-        <p>Tidak ada cafe yang ditemukan sesuai dengan filter yang Anda pilih.</p>
-        @endif
-    </div>
     <!-- Daftar Cafe yang Buka -->
     <div class="search-results mt-4">
-        <h3>Daftar Cafe yang Buka:</h3>
+        <h3>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
         <div class="row">
             @if(isset($cafes) && count($cafes) > 0)
                 @foreach($cafes as $cafe)
@@ -144,8 +86,10 @@
                                 <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                 <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
-                                    {{ number_format($cafe->hargaMax) }}</p>
-                                <p class="card-text"><strong>Jam Buka:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                    {{ number_format($cafe->hargaMax) }}
+                                </p>
+                                <p class="card-text"><strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} -
+                                    {{ $cafe->jam_tutup }}
                                 </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
                                     Detail</a>
@@ -154,10 +98,11 @@
                     </div>
                 @endforeach
             @else
-                <p>Tidak ada cafe yang buka pada saat ini.</p>
+                <p>Tidak ada cafe yang buka pada waktu ini.</p>
             @endif
         </div>
     </div>
+
 
 </div>
 
@@ -183,12 +128,12 @@
             // Mendapatkan geolokasi pengguna
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    function(position) {
+                    function (position) {
                         document.getElementById("longitude").value = position.coords.longitude;
                         document.getElementById("latitude").value = position.coords.latitude;
                         alert("Lokasi Anda berhasil didapatkan! Klik 'Cari Cafe' untuk melanjutkan.");
                     },
-                    function(error) {
+                    function (error) {
                         alert("Gagal mendapatkan lokasi. Pastikan Anda mengizinkan akses lokasi.");
                     }
                 );
