@@ -50,7 +50,7 @@
         <div class="form-group">
             <label for="harga_max">Harga Max:</label>
             <input type="number" name="harga_max" id="harga_max" class="form-control" placeholder="Harga Max" min="0"
-                value="100000">
+                value="0">
         </div>
 
         <!-- Kebutuhan -->

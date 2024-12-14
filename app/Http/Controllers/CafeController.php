@@ -57,8 +57,13 @@ class CafeController extends Controller
         }
 
         // Filter berdasarkan harga
-        $query->where('hargaMin', '>=', $harga_min)
-            ->where('hargaMax', '<=', $harga_max);
+        // $query->where('hargaMin', '>=', $harga_min)
+        //     ->where('hargaMax', '<=', $harga_max);
+        // Filter berdasarkan harga
+        $query->where(function ($q) use ($harga_min, $harga_max) {
+            $q->where('hargaMin', '<=', $harga_max)
+                ->where('hargaMax', '>=', $harga_min);
+        });
 
         // Filter berdasarkan kebutuhan
         if ($kebutuhan) {
@@ -79,16 +84,34 @@ class CafeController extends Controller
                 ->orderBy('distance', 'asc');
         }
 
+        // // Filter berdasarkan jam buka dan jam tutup
+        // if ($jam_buka && $jam_tutup) {
+        //     $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
+
+        //     // Memastikan waktu saat ini berada dalam rentang jam buka dan tutup
+        //     $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
+        //         $q->whereTime('jam_buka', '<=', $current_time)
+        //             ->whereTime('jam_tutup', '>=', $current_time);
+        //     });
+        // }
+
         // Filter berdasarkan jam buka dan jam tutup
-        if ($jam_buka && $jam_tutup) {
+        if ($jam_buka || $jam_tutup) {
             $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
 
-            // Memastikan waktu saat ini berada dalam rentang jam buka dan tutup
             $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
-                $q->whereTime('jam_buka', '<=', $current_time)
-                    ->whereTime('jam_tutup', '>=', $current_time);
+                // Jika jam buka dan jam tutup disediakan, pastikan waktu saat ini berada di antaranya
+                if ($jam_buka && $jam_tutup) {
+                    $q->whereTime('jam_buka', '<=', $current_time)
+                        ->whereTime('jam_tutup', '>=', $current_time);
+                } elseif ($jam_buka) {
+                    $q->whereTime('jam_buka', '<=', $current_time);
+                } elseif ($jam_tutup) {
+                    $q->whereTime('jam_tutup', '>=', $current_time);
+                }
             });
         }
+
 
         // Eksekusi query
         $cafes = $query->get();
@@ -96,5 +119,4 @@ class CafeController extends Controller
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
-
 }
