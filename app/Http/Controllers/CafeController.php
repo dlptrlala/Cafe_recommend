@@ -188,4 +188,17 @@ class CafeController extends Controller
         // Mengirim data cafe ke view
         return view('daftarCafe', compact('cafes'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Mencari cafe berdasarkan nama atau lokasi
+        $cafes = Cafe::where('namaCafe', 'LIKE', "%$query%")
+            ->orWhere('lokasi_area', 'LIKE', "%$query%")
+            ->get();
+
+        // Mengembalikan hasil pencarian ke view
+        return view('search', compact('cafes', 'query'));
+    }
 }

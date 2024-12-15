@@ -1,5 +1,10 @@
 @extends('layout.navbar')
 
+<head>
+    <title>Daftar Cafe</title>
+</head>
+
+@section('content')
 <div class="container">
     <h1 class="my-4">Daftar Cafe</h1>
     <div class="row">
@@ -20,3 +25,5 @@
         @endforeach
     </div>
 </div>
+
+@endsection

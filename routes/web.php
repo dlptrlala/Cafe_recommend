@@ -25,4 +25,6 @@ Route::get('/home', [CafeController::class, 'recommendByTimeContext'])->name('ho
 
 
 Route::get('/daftar-cafe', [CafeController::class, 'index'])->name('daftarCafe');
+Route::get('/search', [CafeController::class, 'search'])->name('searchCafe');
+
 
