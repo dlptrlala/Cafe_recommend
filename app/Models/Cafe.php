@@ -30,11 +30,11 @@ class Cafe extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'idCafe');
+        return $this->hasMany(Review::class, 'idCafe','idCafe');
     }
 
     public function jamOperasionals()
     {
-        return $this->hasMany(JamOperasional::class, 'idCafe');
+        return $this->hasMany(JamOperasional::class, 'idCafe','idCafe');
     }
 }

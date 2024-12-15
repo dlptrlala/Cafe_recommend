@@ -1,4 +1,8 @@
 @extends('layout.navbar')
+
+<head>
+    <title>Home</title>
+</head>
 <style>
     .form-group {
         margin-bottom: 20px;
@@ -41,13 +45,13 @@
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="images\cafe1.jpeg" class="d-block w-100" alt="Image 1">
+            <img src="images\sepakat..jpg" class="d-block w-100" alt="Image 1">
         </div>
         <div class="carousel-item">
-            <img src="images\cafe2.jpeg" class="d-block w-100" alt="Image 2">
+            <img src="images\sunsett.jpg" class="d-block w-100" alt="Image 2">
         </div>
         <div class="carousel-item">
-            <img src="images\jogja.jpeg" class="d-block w-100" alt="Image 3">
+            <img src="images\cafe0.jpg" class="d-block w-100" alt="Image 3">
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -92,7 +96,7 @@
         <div class="form-group">
             <label for="harga_max">Harga Max:</label>
             <input type="number" name="harga_max" id="harga_max" class="form-control" placeholder="Harga Max" min="0"
-                value="100000">
+                value="0">
         </div>
 
         <!-- Kebutuhan -->
@@ -109,6 +113,7 @@
         <!-- Submit Button -->
         <button type="submit" class="btn btn-success">Cari Cafe</button>
     </form>
+
 
     <!-- Hasil Pencarian -->
     <div class="search-results mt-4">
@@ -137,9 +142,10 @@
             <p>Tidak ada cafe yang ditemukan sesuai dengan filter yang Anda pilih.</p>
         @endif
     </div>
+
     <!-- Daftar Cafe yang Buka -->
     <div class="search-results mt-4">
-        <h3>Daftar Cafe yang Buka:</h3>
+        <h3>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
         <div class="row">
             @if(isset($cafes) && count($cafes) > 0)
                 @foreach($cafes as $cafe)
@@ -154,6 +160,9 @@
                                     {{ number_format($cafe->hargaMax) }}
                                 </p>
                                 <p class="card-text"><strong>Jam Buka:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                <p class="card-text"><strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} -
+                                    {{ $cafe->jam_tutup }}
+
                                 </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
                                     Detail</a>
@@ -162,10 +171,11 @@
                     </div>
                 @endforeach
             @else
-                <p>Tidak ada cafe yang buka pada saat ini.</p>
+                <p>Tidak ada cafe yang buka pada waktu ini.</p>
             @endif
         </div>
     </div>
+
 
 </div>
 
@@ -209,6 +219,5 @@
             document.getElementById("latitude").value = "";
         }
     }
-
 </script>
 @endsection
