@@ -72,7 +72,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Daftar Cafe</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('daftarCafe') }}">Daftar Cafe</a></li>
             </ul>
         </div>
         <div class="navbar-icons d-flex align-items-center">

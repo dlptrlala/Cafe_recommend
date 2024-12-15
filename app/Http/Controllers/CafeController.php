@@ -123,6 +123,7 @@ class CafeController extends Controller
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
+
     public function showHomePage(Request $request)
     {
         $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
@@ -177,5 +178,14 @@ class CafeController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
+    }
+
+    public function index()
+    {
+        // Mengambil semua data cafe dari database
+        $cafes = Cafe::all();
+
+        // Mengirim data cafe ke view
+        return view('daftarCafe', compact('cafes'));
     }
 }
