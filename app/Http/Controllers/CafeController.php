@@ -132,23 +132,6 @@ class CafeController extends Controller
         return view('home', compact('time_context', 'cafes'));
     }
 
-    // public function showHomePage(Request $request)
-    // {
-    //     $cafes = Cafe::paginate(3);
-        
-    //     // Debugging: Mengecek jumlah data yang dipaginasi
-    //     if ($cafes->isEmpty()) {
-    //         Log::info('Tidak ada data cafe yang ditemukan.');
-    //     }
-        
-    //     return view('home', compact('cafes'));
-    // }
-    
-
-
-
-
-
     public function recommendByTimeContext()
     {
         $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
@@ -207,16 +190,30 @@ class CafeController extends Controller
         return view('daftarCafe', compact('cafes'));
     }
 
+    // public function search(Request $request)
+    // {
+    //     $query = $request->input('query');
+
+    //     // Mencari cafe berdasarkan nama atau lokasi
+    //     $cafes = Cafe::where('namaCafe', 'LIKE', "%$query%")
+    //         ->orWhere('lokasi_area', 'LIKE', "%$query%")
+    //         ->get();
+
+    //     // Mengembalikan hasil pencarian ke view
+    //     return view('search', compact('cafes', 'query'));
+    // }
+
     public function search(Request $request)
     {
-        $query = $request->input('query');
+        $query = $request->input('query'); // Menangkap query pencarian
 
-        // Mencari cafe berdasarkan nama atau lokasi
-        $cafes = Cafe::where('namaCafe', 'LIKE', "%$query%")
-            ->orWhere('lokasi_area', 'LIKE', "%$query%")
-            ->get();
+        // Pencarian berdasarkan nama atau lokasi
+        $cafes = Cafe::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('namaCafe', 'like', '%' . $query . '%')
+                ->orWhere('lokasi_area', 'like', '%' . $query . '%') // Mencari berdasarkan lokasi
+                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(kebutuhan, '$.\"$query\"')) = 'true'"); // Mencari berdasarkan kebutuhan
+        })->get();
 
-        // Mengembalikan hasil pencarian ke view
         return view('search', compact('cafes', 'query'));
     }
 }
