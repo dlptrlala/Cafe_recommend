@@ -15,6 +15,7 @@ class CafeController extends Controller
     {
         return view("home");
     }
+    
     public function show($id)
     {
         $cafe = Cafe::with('reviews')->findOrFail($id);
