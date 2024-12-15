@@ -15,7 +15,7 @@ class CafeController extends Controller
     {
         return view("home");
     }
-    
+
     public function show($id)
     {
         $cafe = Cafe::with('reviews')->findOrFail($id);
@@ -132,6 +132,23 @@ class CafeController extends Controller
         return view('home', compact('time_context', 'cafes'));
     }
 
+    // public function showHomePage(Request $request)
+    // {
+    //     $cafes = Cafe::paginate(3);
+        
+    //     // Debugging: Mengecek jumlah data yang dipaginasi
+    //     if ($cafes->isEmpty()) {
+    //         Log::info('Tidak ada data cafe yang ditemukan.');
+    //     }
+        
+    //     return view('home', compact('cafes'));
+    // }
+    
+
+
+
+
+
     public function recommendByTimeContext()
     {
         $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
@@ -181,7 +198,7 @@ class CafeController extends Controller
         return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
     }
 
-    public function index()
+    public function daftarCafe()
     {
         // Mengambil semua data cafe dari database
         $cafes = Cafe::all();

@@ -54,9 +54,9 @@
 @section('content')
 <div class="container mt-5">
     <!-- Filter Section -->
-    <div class="card p-4 mb-4 shadow-sm">
-        <h3 class="mb-4">Filter Rekomendasi Cafe</h3>
-        <form action="/recommend" method="GET" class="row gx-3 gy-2 align-items-end">
+    <div class="filter-card mb-4">
+        <h3>Filter Rekomendasi Cafe</h3>
+        <form action="/recommend" method="GET" class="row gx-3 gy-2 align-items-center">
             <!-- Lokasi -->
             <div class="col-md-3">
                 <label for="lokasi" class="form-label">Pilih Lokasi:</label>
@@ -74,13 +74,11 @@
                 <input type="hidden" id="latitude" name="latitude">
             </div>
 
-            <!-- Harga Min -->
+            <!-- Rentang Harga -->
             <div class="col-md-2">
                 <label for="harga_min" class="form-label">Harga Min:</label>
                 <input type="number" name="harga_min" id="harga_min" class="form-control" placeholder="Min" min="0">
             </div>
-
-            <!-- Harga Max -->
             <div class="col-md-2">
                 <label for="harga_max" class="form-label">Harga Max:</label>
                 <input type="number" name="harga_max" id="harga_max" class="form-control" placeholder="Max" min="0">
@@ -99,39 +97,37 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="col-md-2">
+            <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-success w-100">Cari Cafe</button>
             </div>
         </form>
     </div>
 
-
-
     <!-- Daftar Cafe -->
     <h4>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
     <div class="row">
         @if(isset($cafes) && count($cafes) > 0)
-        @foreach($cafes as $cafe)
-        <div class="col-md-4">
-            <div class="card">
-                <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                    <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                    <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                    <p class="card-text">
-                        <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp {{ number_format($cafe->hargaMax) }}
-                    </p>
-                    <p class="card-text">
-                        <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
-                    </p>
-                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
+            @foreach($cafes as $cafe)
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                        <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                        <p class="card-text">
+                            <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp {{ number_format($cafe->hargaMax) }}
+                        </p>
+                        <p class="card-text">
+                            <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                        </p>
+                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        @endforeach
+            @endforeach
         @else
-        <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
+            <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
         @endif
     </div>
 </div>
