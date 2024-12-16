@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jam_operasionals', function (Blueprint $table) {
-            $table->id('idJam');
+            // $table->id('idJam');
             $table->foreignId('idCafe')->constrained('cafes', 'idCafe')->onDelete('cascade');
-            $table->string('hari_operasional'); // Contoh: "Senin", "Selasa", atau "Senin-Jumat"
-            $table->time('jam_buka');
-            $table->time('jam_tutup');
+            $table->json('jadwal'); // Kolom JSON untuk menyimpan jadwal operasional
+            // $table->timestamps(); // Kolom created_at dan updated_at
             // $table->timestamps();
         });
     }

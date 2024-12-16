@@ -22,8 +22,8 @@ return new class extends Migration
             $table->integer('hargaMin');
             $table->integer('hargaMax');
             $table->json('kebutuhan'); // JSON untuk menyimpan kategori kebutuhan
-            $table->time('jam_buka');
-            $table->time('jam_tutup');
+            // $table->time('jam_buka');
+            // $table->time('jam_tutup');
             $table->text('deskripsi');
             // $table->timestamps();
         });        
