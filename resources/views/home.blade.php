@@ -42,11 +42,12 @@
             /* Bayangan lembut */
             transition: filter 0.3s ease, transform 0.3s ease;
             /* Efek transisi */
-       
-    margin-bottom: 20px; /* Jarak antar card ke bawah */
-}
 
-    
+            margin-bottom: 20px;
+            /* Jarak antar card ke bawah */
+        }
+
+
 
         /* Efek saat hover untuk memperjelas card */
         .card:hover {
@@ -217,12 +218,12 @@
                                             <div class="card">
                                                 <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                                                    <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
                                                     <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                                     <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                                     <p class="card-text">
-                                                        <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
-                                                        {{ number_format($cafe->hargaMax) }}
+                                                        <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
+                                                        Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
                                                     </p>
                                                     <p class="card-text">
                                                         <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
