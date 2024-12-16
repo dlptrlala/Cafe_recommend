@@ -95,7 +95,7 @@
                     </div>
                     <div class="modal-body">
                         <input type="text" name="query" class="form-control"
-                            placeholder="Masukkan nama atau lokasi cafe..." required>
+                            placeholder="Masukkan kata kunci pencarian anda" required>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Cari</button>

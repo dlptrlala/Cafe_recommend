@@ -31,6 +31,7 @@ class User extends Authenticatable
         return $this->hasMany(Review::class, 'idUser');
     }
 
+
     // protected $hidden = [
     //     'passwordUser',
     //     'remember_token',

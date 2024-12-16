@@ -161,25 +161,55 @@ class CafeController extends Controller
             return 'dini hari';
         }
     }
+
+
+    // public function storeReview(Request $request, $id)
+    // {
+    //     $validated = $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|email|max:255',
+    //         'rating' => 'required|integer|min:1|max:5',
+    //         'review' => 'required|string',
+    //     ]);
+
+    //     Review::create([
+    //         'idCafe' => $id,
+    //         'name' => $validated['name'],
+    //         'email' => $validated['email'],
+    //         'rating' => $validated['rating'],
+    //         'review' => $validated['review'],
+    //     ]);
+
+    //     return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
+    // }
+
+
     public function storeReview(Request $request, $id)
     {
-        $validated = $request->validate([
+        // Validasi input
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required|string',
+            'review' => 'required|string|max:1000',
         ]);
 
-        Review::create([
-            'idCafe' => $id,
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'rating' => $validated['rating'],
-            'review' => $validated['review'],
-        ]);
+        // Simpan ulasan ke database
+        $review = new Review();
+        $review->idCafe = $id; // ID cafe yang diulas
+        $review->name = $validatedData['name'];
+        $review->email = $validatedData['email'];
+        $review->rating = $validatedData['rating'];
+        $review->review = $validatedData['review'];
+        $review->created_at = now();
 
-        return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
+        // Simpan data
+        $review->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Ulasan Anda berhasil disimpan!');
     }
+
 
     public function daftarCafe()
     {
