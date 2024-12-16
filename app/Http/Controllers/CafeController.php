@@ -124,57 +124,73 @@ class CafeController extends Controller
         return view('home2', compact('cafes'));
     }
     public function showHomePage(Request $request)
-{
-    $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
+    {
+        // Mendapatkan hari saat ini
+        $hari_ini = Carbon::now()->locale('id')->format('l'); // Menghasilkan nama hari dalam bahasa Indonesia, seperti 'Senin'
+        $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
 
-    // Menggabungkan tabel cafes dan jam_operasionals
-    $cafes = DB::table('cafes')
-        ->join('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe') // Join berdasarkan idCafe
-        ->select(
-            'cafes.idCafe',
-            'cafes.namaCafe',
-            'cafes.gambarCafe as image_url',
-            'cafes.lokasi_area as alamatCafe',
-            'cafes.latitude',
-            'cafes.longitude',
-            'cafes.hargaMin',
-            'cafes.hargaMax',
-            'cafes.deskripsi as deskripsiCafe',
-            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka')) as jam_buka"),
-            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup')) as jam_tutup")
-        )
-        ->get();
+        // Menggabungkan tabel cafes dan jam_operasionals
+        $cafes = DB::table('cafes')
+            ->join('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe') // Join berdasarkan idCafe
+            ->select(
+                'cafes.idCafe',
+                'cafes.namaCafe',
+                'cafes.gambarCafe as image_url',
+                'cafes.alamatCafe as alamatCafe',
+                'cafes.latitude',
+                'cafes.longitude',
+                'cafes.hargaMin',
+                'cafes.hargaMax',
+                'cafes.deskripsi as deskripsiCafe',
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[*].hari')) as hari_operasional"),
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka')) as jam_buka"),
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup')) as jam_tutup")
+            )
+            ->distinct() // Menghindari duplikasi
+            ->get();
 
-    return view('home', compact('time_context', 'cafes'));
-}
+        return view('home', compact('time_context', 'cafes'));
+    }
 
-public function recommendByTimeContext()
-{
-    $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
-    $current_time = now()->format('H:i'); // Waktu saat ini dalam format 24 jam (08:00:00)
+    public function recommendByTimeContext()
+    {
+        // Mendapatkan hari saat ini
+        $hari_ini = Carbon::now()->locale('id')->format('l'); // Menghasilkan nama hari dalam bahasa Indonesia, seperti 'Senin'
+        $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
+        $current_time = now()->format('H:i'); // Waktu saat ini dalam format 24 jam (08:00:00)
 
-    // Query data kafe dan jam buka dari tabel 'cafes' dan 'jam_operasionals'
-    $cafes = Cafe::join('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe')
-        ->select(
-            'cafes.idCafe',
-            'cafes.namaCafe',
-            'cafes.gambarCafe as image_url',
-            'cafes.alamatCafe as alamatCafe',
-            'cafes.latitude',
-            'cafes.longitude',
-            'cafes.hargaMin',
-            'cafes.hargaMax',
-            'cafes.deskripsi as deskripsiCafe',
-            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka')) as jam_buka"),
-            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup')) as jam_tutup")
-        )
-        ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))) <= ?", [$current_time]) // Buka sebelum waktu sekarang
-        ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup'))) >= ?", [$current_time]) // Tutup setelah waktu sekarang
-        ->orderBy(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))"), 'asc') // Urutkan berdasarkan jam buka
-        ->get();
+        // Query data kafe dan jam buka dari tabel 'cafes' dan 'jam_operasionals'
+        $cafes = Cafe::join('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe')
+            ->select(
+                'cafes.idCafe',
+                'cafes.namaCafe',
+                'cafes.gambarCafe as image_url',
+                'cafes.alamatCafe as alamatCafe',
+                'cafes.latitude',
+                'cafes.longitude',
+                'cafes.hargaMin',
+                'cafes.hargaMax',
+                'cafes.deskripsi as deskripsiCafe',
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[*].hari')) as hari_operasional"),
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka')) as jam_buka"),
+                DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup')) as jam_tutup")
+            )
+            ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))) <= ?", [$current_time]) // Buka sebelum waktu sekarang
+            ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup'))) >= ?", [$current_time]) // Tutup setelah waktu sekarang
+            ->orderBy(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))"), 'asc') // Urutkan berdasarkan jam buka
+            ->get();
 
-    return view('home', compact('time_context', 'cafes'));
-}
+        // Menyaring cafe berdasarkan hari yang sesuai dengan hari ini
+        $cafes_filtered = $cafes->filter(function ($cafe) use ($hari_ini) {
+            // Mengubah string JSON menjadi array PHP
+            $hari_operasional = json_decode($cafe->hari_operasional);
+
+            // Mengecek apakah hari ini ada dalam array hari operasional cafe
+            return in_array($hari_ini, $hari_operasional);
+        });
+
+        return view('home', compact('time_context', 'cafes', 'cafes_filtered'));
+    }
 
 
 
