@@ -48,9 +48,9 @@
             height: 200px;
             object-fit: cover;
         }
-        </style>
+    </style>
 </head>
-   
+
 </style>
 @section('content')
 <div class="container mt-5">
@@ -64,7 +64,7 @@
                 <label for="lokasi" class="form-label">Pilih Lokasi:</label>
                 <select id="lokasi" name="lokasi_area" class="form-select" onchange="handleLocationChange(this)">
                     <option value="" disabled selected>Pilih Lokasi</option>
-                    <option value="geo">Resto Sekitar (Berdasarkan Lokasi Anda)</option>
+                    <option value="geo">Resto Sekitar Anda</option>
                     <option value="Semua Lokasi">Semua Lokasi</option>
                     <option value="Bantul">Bantul</option>
                     <option value="Gunung Kidul">Gunung Kidul</option>
@@ -99,105 +99,74 @@
             </div>
 
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-success">Cari Cafe</button>
-    </form>
-
-
-
-    <!-- Daftar Cafe yang Buka -->
-    <div class="search-results mt-4">
-        <h3>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
-        <div class="row">
-            @if(isset($cafes) && count($cafes) > 0)
-                @foreach($cafes as $cafe)
-                    <div class="col-md-4">
-                        <div class="card">
-                            <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                                <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                                <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
-                                    {{ number_format($cafe->hargaMax) }}
-                                </p>
-                                <p class="card-text"><strong>Jam Buka:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
-                                <p class="card-text"><strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} -
-                                    {{ $cafe->jam_tutup }}
-
-                                </p>
-                                <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
-                                    Detail</a>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <p>Tidak ada cafe yang buka pada waktu ini.</p>
-            @endif
-        </div>
-
             <!-- Submit Button -->
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-success w-100">Cari Cafe</button>
-            </div>
+            <button type="submit" class="btn btn-success">Cari Cafe</button>
         </form>
 
-    </div>
 
-    <!-- Daftar Cafe -->
-    <h4>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
-    <div class="row">
-        @if(isset($cafes) && count($cafes) > 0)
-            @foreach($cafes as $cafe)
-            <div class="col-md-4">
-                <div class="card">
-                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                        <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                        <p class="card-text">
-                            <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp {{ number_format($cafe->hargaMax) }}
-                        </p>
-                        <p class="card-text">
-                            <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
-                        </p>
-                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
+        <!-- Daftar Cafe yang Buka -->
+        <div class="search-results mt-4">
+            <h3>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
+            <div class="row">
+                @if(isset($cafes) && count($cafes) > 0)
+                @foreach($cafes as $cafe)
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                            <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                            <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                            <p class="card-text">
+                                <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} - Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
+                            </p>
+                            <p class="card-text">
+                                <strong>Jam Operasional:</strong>
+                                @if(date('H:i', strtotime($cafe->jam_buka)) == '00:00' && date('H:i', strtotime($cafe->jam_tutup)) == '00:00')
+                                    24 Jam
+                                @else
+                                    {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
+                                @endif
+                            </p>
+
+
+                            <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
+                        </div>
                     </div>
                 </div>
+                @endforeach
+                @else
+                <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
+                @endif
             </div>
-            @endforeach
-        @else
-            <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
-        @endif
+        </div>
     </div>
-</div>
 
-<!-- Geolocation Script -->
-<script>
-    function handleLocationChange(selectElement) {
-        const selectedValue = selectElement.value;
 
-        if (selectedValue === "geo") {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        document.getElementById("longitude").value = position.coords.longitude;
-                        document.getElementById("latitude").value = position.coords.latitude;
-                        alert("Lokasi berhasil didapatkan!");
-                    },
-                    function(error) {
-                        alert("Gagal mendapatkan lokasi.");
-                    }
-                );
+    <!-- Geolocation Script -->
+    <script>
+        function handleLocationChange(selectElement) {
+            const selectedValue = selectElement.value;
+
+            if (selectedValue === "geo") {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            document.getElementById("longitude").value = position.coords.longitude;
+                            document.getElementById("latitude").value = position.coords.latitude;
+                            alert("Lokasi berhasil didapatkan!");
+                        },
+                        function(error) {
+                            alert("Gagal mendapatkan lokasi.");
+                        }
+                    );
+                } else {
+                    alert("Geolokasi tidak didukung oleh browser Anda.");
+                }
             } else {
-                alert("Geolokasi tidak didukung oleh browser Anda.");
+                document.getElementById("longitude").value = "";
+                document.getElementById("latitude").value = "";
             }
-        } else {
-            document.getElementById("longitude").value = "";
-            document.getElementById("latitude").value = "";
         }
-    }
-</script>
-@endsection
+    </script>
+    @endsection
