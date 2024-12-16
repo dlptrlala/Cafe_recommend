@@ -25,10 +25,11 @@
     }
 
     .sidebar {
-        background-color: #f8f9fa;
+        background-color: rgb(255, 219, 140);
         padding: 20px;
         border-radius: 8px;
         margin-right: 20px;
+        margin-top: 50px;
     }
 
     .sidebar h4 {
@@ -40,8 +41,8 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3">
-            <div class="sidebar">
-                <h4>Filter Pencarian</h4>
+            <div class="sidebar mt-5 ">
+                <h4 style="font-weight: bold;">Filter Pencarian</h4>
                 <form action="/recommend" method="GET" class="filter-form">
                     <!-- Lokasi -->
                     <div class="form-group">
@@ -123,7 +124,8 @@
                     </script>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-success w-100">Cari Cafe</button>
+                    <button type="submit" class="btn" style="background-color: #8B4513; color: white;;">Cari
+                        Cafe</button>
                 </form>
             </div>
         </div>
@@ -132,13 +134,14 @@
         <div class="col-md-9">
             <div class="search-results mt-4">
                 @if(isset($cafes) && count($cafes) > 0)
-                    <h3>Hasil Pencarian:</h3>
-                    <div class="row">
+                    <h3 style="margin-top: -5px;">Hasil Pencarian:</h3>
+                    <div class="row mb-3">
                         @foreach($cafes as $cafe)
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->name }}">
-                                    <div class="card-body">
+                            <div class="col-md-4" style="margin-bottom: 20px">
+                                <div class="card h-100 d-flex flex-column"> <!-- Tambahkan d-flex dan flex-column -->
+                                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->name }}"
+                                        style="height: 200px; object-fit: cover;">
+                                    <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
                                         <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                         <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
@@ -146,13 +149,12 @@
                                             {{ number_format($cafe->hargaMax) }}
                                         </p>
                                         <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
-                                            {{$cafe->jam_tutup}}
-                                        </p>
-                                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}"
-                                            class="btn btn-primary">Lihat
-                                            Detail</a>
+                                            {{$cafe->jam_tutup}}</p>
+                                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
+                                            style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
                                     </div>
                                 </div>
+
                             </div>
                         @endforeach
                     </div>

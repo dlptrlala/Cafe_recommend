@@ -297,7 +297,7 @@
                 <div class="row">
                     @endif
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card card h-100">
                             <img src="{{ asset('storage/' . $cafe->image_url) }}" class="card-img-top"
                                 alt="{{ $cafe->namaCafe }}">
                             <div class="card-body">
