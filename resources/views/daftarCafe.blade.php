@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="my-4">Daftar Cafe</h1>
+    <h1 class="my-4" style="font-weight: bold; text-align: center;">Daftar Cafe</h1>
     <div class="row">
         @foreach($cafes as $cafe)
         <div class="col-md-4 mb-4">
@@ -18,7 +18,7 @@
                         Lokasi: {{ $cafe->lokasi_area }} <br>
                         Harga: Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} - Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
                     </p>
-                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
+                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn " style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
                 </div>
             </div>
         </div>
