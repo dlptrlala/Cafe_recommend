@@ -8,13 +8,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Review extends Model
 {
     use HasFactory;
-    // public $timestamps = false;
+    public $timestamps = true;
     protected $primaryKey = 'idReview';
 
     protected $fillable = ['idCafe', 'name', 'email', 'rating', 'review'];
 
     public function cafe()
     {
-        return $this->belongsTo(Cafe::class, 'idCafe','idCafe');
+        return $this->belongsTo(Cafe::class, 'idCafe', 'idCafe');
+    }
+    
+    // Relasi dengan model User (satu ke banyak)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'idUser', 'id');
     }
 }

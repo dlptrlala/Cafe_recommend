@@ -18,7 +18,7 @@
                         Lokasi: {{ $cafe->lokasi_area }} <br>
                         Harga: Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} - Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
                     </p>
-                    <a href="#" class="btn btn-primary">Lihat Detail</a>
+                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat Detail</a>
                 </div>
             </div>
         </div>
