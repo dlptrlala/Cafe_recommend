@@ -91,7 +91,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="{{ route('searchCafe') }}" method="GET">
-                    <div class="modal-header">
+                    <div class="modal-header" >
                         <h5 class="modal-title" id="searchModalLabel">Cari Cafe</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -100,7 +100,7 @@
                             placeholder="Masukkan kata kunci pencarian anda" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Cari</button>
+                        <button type="submit" class="btn"style="background-color: #8B4513; color: white;">Cari</button>
                     </div>
                 </form>
             </div>
