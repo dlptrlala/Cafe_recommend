@@ -19,8 +19,8 @@ class Cafe extends Model
         'hargaMin',
         'hargaMax',
         'kebutuhan',
-        'jam_buka',
-        'jam_tutup',
+        // 'jam_buka',
+        // 'jam_tutup',
         'deskripsi',
     ];
 

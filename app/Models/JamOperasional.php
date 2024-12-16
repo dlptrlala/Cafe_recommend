@@ -10,14 +10,15 @@ class JamOperasional extends Model
     public $timestamps = false;
     use HasFactory;
 
-    protected $primaryKey = 'idJam'; // Primary key
+    protected $table = 'jam_operasionals';
     protected $fillable = [
-        'idCafe',
-        'hari_operasional',
-        'jam_buka',
-        'jam_tutup',
+        'idCafe', // Kunci asing yang merujuk ke tabel 'cafes'
+        'jadwal', // Kolom JSON untuk jadwal operasional
     ];
-
+    // Menentukan cast untuk kolom yang disimpan dalam format JSON
+    protected $casts = [
+        'jadwal' => 'array', // Menyimpan JSON sebagai array
+    ];
     public function cafe()
     {
         return $this->belongsTo(Cafe::class, 'idCafe');

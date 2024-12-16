@@ -124,28 +124,63 @@ class CafeController extends Controller
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
-
     public function showHomePage(Request $request)
     {
         $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
-        $cafes = Cafe::all(); // Contoh data cafe
+
+        // Mengambil semua cafe dan jam buka/tutup dari jadwal JSON
+        $cafes = Cafe::select(
+            'idCafe',
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jadwal, '$[0].jam_buka')) as jam_buka"),
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jadwal, '$[0].jam_tutup')) as jam_tutup")
+        )
+            ->get();
+
         return view('home', compact('time_context', 'cafes'));
     }
-
     public function recommendByTimeContext()
     {
         $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
         $current_time = now()->format('H:i:s'); // Waktu saat ini dengan format 24 jam (08:00:00)
 
-        // Query cafe yang buka sesuai waktu saat ini
-        $cafes = Cafe::whereTime('jam_buka', '<=', $current_time)
-            ->whereTime('jam_tutup', '>=', $current_time)
-            ->orderBy('jam_buka', 'asc')  // Urutkan berdasarkan jam buka
+        // Query cafe yang buka sesuai waktu saat ini dari tabel 'jam_operasionals'
+        $cafes = Cafe::select(
+            'cafes.idCafe',
+            'jam_operasionals.jadwal',
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka')) as jam_buka"),
+            DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup')) as jam_tutup")
+        )
+            ->join('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe')  // Menghubungkan tabel cafes dan jam_operasionals
+            ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))) <= ?", [$current_time])  // Pastikan jam buka sebelum waktu sekarang
+            ->whereRaw("TIME(JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_tutup'))) >= ?", [$current_time])  // Pastikan jam tutup setelah waktu sekarang
+            ->orderBy(DB::raw("JSON_UNQUOTE(JSON_EXTRACT(jam_operasionals.jadwal, '$[0].jam_buka'))"), 'asc')  // Urutkan berdasarkan jam buka
             ->get();
 
-        // Kirim data cafe dan waktu ke view 'home'
         return view('home', compact('time_context', 'cafes'));
     }
+
+
+    // public function showHomePage(Request $request)
+    // {
+    //     $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
+    //     $cafes = Cafe::all(); // Contoh data cafe
+    //     return view('home', compact('time_context', 'cafes'));
+    // }
+
+    // public function recommendByTimeContext()
+    // {
+    //     $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
+    //     $current_time = now()->format('H:i:s'); // Waktu saat ini dengan format 24 jam (08:00:00)
+
+    //     // Query cafe yang buka sesuai waktu saat ini
+    //     $cafes = Cafe::whereTime('jam_buka', '<=', $current_time)
+    //         ->whereTime('jam_tutup', '>=', $current_time)
+    //         ->orderBy('jam_buka', 'asc')  // Urutkan berdasarkan jam buka
+    //         ->get();
+
+    //     // Kirim data cafe dan waktu ke view 'home'
+    //     return view('home', compact('time_context', 'cafes'));
+    // }
 
     // Method untuk menentukan konteks waktu
     private function getTimeContext()
