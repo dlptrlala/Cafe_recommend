@@ -58,6 +58,7 @@
         /* Membalik secara vertikal */
         display: inline-block;
     }
+ 
 </style>
 
 <body>
@@ -78,7 +79,7 @@
         <div class="navbar-icons d-flex align-items-center">
             <!-- Search Icon -->
             <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#searchModal">
-                <i class="fa fa-search"></i>
+                <i class="fa fa-search"></i> 
             </a>
         </div>
     </nav>
@@ -137,6 +138,6 @@
 
     <!-- Main content area -->
     <div class="container mt-4">
-        
+    <h2 style="text-align: center; font-weight: bold; font-size: 20px;">Cari Cafe Sesuai Kebutuhan Anda</h2>
         @yield('content')
     </div>
