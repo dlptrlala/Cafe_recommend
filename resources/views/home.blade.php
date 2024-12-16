@@ -36,22 +36,25 @@
         }
 
         /* Style untuk Card Cafe */
+        /* Filter pada seluruh card */
         .card {
-            font-family: 'Poppins';
-            /* Ganti dengan font yang Anda inginkan */
-            font-size: 14px;
-            /* Ukuran font untuk seluruh card */
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            height: 350px;
-            /* Menetapkan tinggi tetap untuk semua card */
-            display: flex;
-            flex-direction: column;
-            /* Memastikan konten card mengalir vertikal */
-            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+            /* Bayangan lembut */
+            transition: filter 0.3s ease, transform 0.3s ease;
+            /* Efek transisi */
+       
+    margin-bottom: 20px; /* Jarak antar card ke bawah */
+}
+
+    
+
+        /* Efek saat hover untuk memperjelas card */
+        .card:hover {
+            filter: brightness(1.1) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
+            transform: scale(1.03);
+            /* Sedikit memperbesar card */
         }
+
 
         .card-body {
             flex-grow: 1;
@@ -71,11 +74,71 @@
             margin-top: -20px;
             /* Sesuaikan nilai untuk mengatur jarak ke atas */
         }
+
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            position: absolute;
+            top: 10%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            color: white;
+        }
+
+
+        .carousel-indicators [data-bs-target] {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+
+        .container {
+            width: 95%;
+            /* Lebar container menjadi 80% dari lebar layar */
+            max-width: 1200px;
+            /* Lebar maksimal container */
+
+        }
     </style>
 </head>
 
 </style>
+
 @section('content')
+<div id="carouselExampleIndicators" class="carousel slide container-fluid p-0" data-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+            aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+            aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="images\lap.jpeg" class="d-block w-100" alt="Image 1">
+        </div>
+        <div class="carousel-item">
+            <img src="images\sunsett.jpg" class="d-block w-100" alt="Image 2">
+        </div>
+        <div class="carousel-item">
+            <img src="images\cafe0.jpg" class="d-block w-100" alt="Image 3">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<h2 style="text-align: center; font-weight: bold; font-size: 20px; margin-top: 10px;">Cari Cafe Sesuai Kebutuhan Anda
+</h2>
 <div class="container mt-3">
     <!-- Filter Section -->
     <div class="filter-card mb-4">
@@ -130,70 +193,88 @@
 
                 <!-- Button Cari -->
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-success w-100">Cari</button>
+                    <button type="submit" class="btn btn-success w-100">Cari cafe</button>
                 </div>
-
+            </div>
         </form>
-
-
-        <!-- Hasil Pencarian -->
-        <div id="cafeCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
-
-            <!-- Daftar Cafe -->
-            <h4>Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
+    </div>
+</div>
+<h3 style="font-size: 25px;">Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
+<!-- Hasil Pencarian -->
+<div id="cafeCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
             <div class="row">
                 @if(isset($cafes) && count($cafes) > 0)
-                    @foreach($cafes as $cafe)
-                        <div class="col-md-4">
-                            <div class="card">
-                                <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                                    <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                                    <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                    <p class="card-text">
-                                        <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
-                                        {{ number_format($cafe->hargaMax) }}
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
-                                    </p>
-                                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
-                                        Detail</a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                            @foreach($cafes as $index => $cafe)
+                                        @if($index % 3 == 0 && $index != 0)
+                                                </div>
+                                            </div>
+                                            <div class="carousel-item">
+                                                <div class="row">
+                                        @endif
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                                                    <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                                                    <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                                                    <p class="card-text">
+                                                        <strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp
+                                                        {{ number_format($cafe->hargaMax) }}
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                                    </p>
+                                                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
+                                                        Detail</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                            @endforeach
                 @else
                     <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
                 @endif
             </div>
+        </div>
     </div>
+    <!-- Carousel controls dipindahkan ke luar dari row -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#cafeCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 
-    <!-- Geolocation Script -->
-    <script>
-        function handleLocationChange(selectElement) {
-            const selectedValue = selectElement.value;
 
-            if (selectedValue === "geo") {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        function (position) {
-                            document.getElementById("longitude").value = position.coords.longitude;
-                            document.getElementById("latitude").value = position.coords.latitude;
-                            alert("Lokasi berhasil didapatkan!");
-                        },
-                        function (error) {
-                            alert("Gagal mendapatkan lokasi.");
-                        }
-                    );
-                } else {
-                    alert("Geolokasi tidak didukung oleh browser Anda.");
-                }
+<!-- Geolocation Script -->
+<script>
+    function handleLocationChange(selectElement) {
+        const selectedValue = selectElement.value;
+
+        if (selectedValue === "geo") {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        document.getElementById("longitude").value = position.coords.longitude;
+                        document.getElementById("latitude").value = position.coords.latitude;
+                        alert("Lokasi berhasil didapatkan!");
+                    },
+                    function (error) {
+                        alert("Gagal mendapatkan lokasi.");
+                    }
+                );
             } else {
-                document.getElementById("longitude").value = "";
-                document.getElementById("latitude").value = "";
+                alert("Geolokasi tidak didukung oleh browser Anda.");
             }
+        } else {
+            document.getElementById("longitude").value = "";
+            document.getElementById("latitude").value = "";
         }
-    </script>
-    @endsection
+    }
+</script>
+@endsection
