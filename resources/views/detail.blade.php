@@ -119,44 +119,51 @@
             </div>
         </div>
 
-        <!-- Kolom Daftar Ulasan -->
         <div class="col-md-6">
             <h4>Ulasan Pengguna</h4>
             <div class="row g-3">
-                @foreach ($cafe->reviews as $review)
-                    <div class="col-md-12 mb-3"> <!-- Ulasan dalam satu kolom penuh -->
-                        <div class="card shadow-sm" style="height: auto;">
-                            <div class="card-body">
-                                <!-- Nama, Email, dan Rating -->
-                                <h5 class="card-title d-flex justify-content-between align-items-center"
-                                    style="font-size: 1rem;">
-                                    <span>
-                                        {{ $review->name }}
-                                        <span class="small text-muted">({{ $review->email }})</span>
-                                    </span>
-                                    <div class="rating" style="display: flex; gap: 2px;">
-                                        @for ($i = 0; $i < $review->rating; $i++)
-                                            <i class="fas fa-star text-warning"></i>
-                                        @endfor
-                                        @for ($i = $review->rating; $i < 5; $i++)
-                                            <i class="far fa-star text-warning"></i>
-                                        @endfor
-                                    </div>
-                                </h5>
-                                <!-- Review -->
-                                <p class="card-text mb-2" style="font-size: 0.9rem;">
-                                    {{ $review->review }}
-                                </p>
-                                <!-- Tanggal Pembuatan -->
-                                <small class="text-muted">
-                                    Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
-                                </small>
-                            </div>
+                <!-- Periksa apakah ada ulasan -->
+                @if ($cafe->reviews->isEmpty())
+                    <div class="col-md-12">
+                        <div class="alert alert-info" role="alert">
+                            Belum ada ulasan untuk cafe ini. Jadilah yang pertama memberikan ulasan!
                         </div>
                     </div>
-                @endforeach
+                @else
+                    @foreach ($cafe->reviews as $review)
+                        <div class="col-md-12 mb-3"> <!-- Ulasan dalam satu kolom penuh -->
+                            <div class="card shadow-sm" style="height: auto;">
+                                <div class="card-body">
+                                    <!-- Nama, Email, dan Rating -->
+                                    <h5 class="card-title d-flex justify-content-between align-items-center"
+                                        style="font-size: 1rem;">
+                                        <span>
+                                            {{ $review->name }}
+                                            <span class="small text-muted">({{ $review->email }})</span>
+                                        </span>
+                                        <div class="rating" style="display: flex; gap: 2px;">
+                                            @for ($i = 0; $i < $review->rating; $i++)
+                                                <i class="fas fa-star text-warning"></i>
+                                            @endfor
+                                            @for ($i = $review->rating; $i < 5; $i++)
+                                                <i class="far fa-star text-warning"></i>
+                                            @endfor
+                                        </div>
+                                    </h5>
+                                    <!-- Review -->
+                                    <p class="card-text mb-2" style="font-size: 0.9rem;">
+                                        {{ $review->review }}
+                                    </p>
+                                    <!-- Tanggal Pembuatan -->
+                                    <small class="text-muted">
+                                        Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
-    </div>
 
-    @endsection
+        @endsection
