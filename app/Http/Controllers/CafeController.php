@@ -160,7 +160,7 @@ public function recommendByTimeContext()
             'cafes.idCafe',
             'cafes.namaCafe',
             'cafes.gambarCafe as image_url',
-            'cafes.lokasi_area as alamatCafe',
+            'cafes.alamatCafe as alamatCafe',
             'cafes.latitude',
             'cafes.longitude',
             'cafes.hargaMin',

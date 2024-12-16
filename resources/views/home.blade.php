@@ -74,7 +74,7 @@
             /* Sesuaikan nilai untuk mengatur jarak ke atas */
         }
 
-
+        /* Style untuk tombol prev dan next di carousel atas*/
         .carousel-prev,
         .carousel-next {
             position: absolute;
@@ -104,7 +104,7 @@
             /* Menggeser tombol ke kanan */
         }
 
-        /* Style untuk tombol prev dan next */
+        /* Style untuk tombol prev dan next di daftar cafe */
         .cafe-prev,
         .cafe-next {
             position: absolute;
@@ -157,7 +157,7 @@
             /* Sesuaikan tinggi otomatis */
             max-height: 800px;
             /* Batasi tinggi maksimum gambar */
-            max-width:1100px;
+            max-width: 1100px;
             object-fit: cover;
             /* Pastikan gambar terpotong proporsional */
         }
@@ -171,7 +171,8 @@
             max-width: 1200px;
             /* Batasi lebar maksimal */
         }
-        h4{
+
+        h4 {
             margin-left: 33px;
         }
     </style>
@@ -294,7 +295,7 @@
                                                     <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
                                                     <div class="card-body">
                                                         <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
-                                                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+
                                                         <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
                                                         <p class="card-text">
                                                             <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
