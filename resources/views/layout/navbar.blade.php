@@ -13,6 +13,8 @@
 <style>
     body {
         font-family: 'Poppins';
+        background-color:rgb(255, 246, 231); ;
+      
     }
 
     /* Navbar */
@@ -30,7 +32,7 @@
     }
 
     .navbar-brand .highlight {
-        color: #6c9969;
+        color:rgb(122, 98, 19);
     }
 
     .navbar-nav .nav-link {

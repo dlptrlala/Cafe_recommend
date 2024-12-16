@@ -117,7 +117,6 @@ class CafeController extends Controller
             });
         }
 
-
         // Eksekusi query
         $cafes = $query->get();
 

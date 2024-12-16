@@ -181,7 +181,7 @@
 </style>
 
 @section('content')
-<div id="carouselExampleIndicators" class="carousel slide container-fluid p-0" data-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide container-fluid p-0" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
             aria-current="true" aria-label="Slide 1"></button>
@@ -201,18 +201,19 @@
             <img src="images\cafe0.jpg" class="d-block w-100" alt="Image 3">
         </div>
     </div>
-    <button class="carousel-control-prev carousel-prev" type="button" data-bs-target="#cafeCarousel"
+    <button class="carousel-control-prev carousel-prev" type="button" data-bs-target="#carouselExampleIndicators"
         data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next carousel-next" type="button" data-bs-target="#cafeCarousel"
+    <button class="carousel-control-next carousel-next" type="button" data-bs-target="#carouselExampleIndicators"
         data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-<h2 style="text-align: center; font-weight: bold; font-size: 20px; margin-top: 10px;">Cari Cafe Sesuai Kebutuhan Anda
+
+<h2 style="text-align: center; font-weight: bold; font-size: 30px; margin-top: 10px;">Cari Cafe Sesuai Kebutuhan Anda
 </h2>
 <div class="container mt-3">
     <!-- Filter Section -->
@@ -268,13 +269,15 @@
 
                 <!-- Button Cari -->
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-success w-100">Cari cafe</button>
+                    <button type="submit" class="btn w-100" style="background-color: #8B4513; color: white;">Cari
+                        Cafe</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<h4 style="font-size: 25px;">Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
+<h4 style="font-size: 25px; text-align: center;">Daftar Cafe yang Buka di
+    {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
 <!-- Hasil Pencarian -->
 <div class="container d-flex justify-content-center position-relative">
     <!-- Carousel -->
@@ -305,7 +308,7 @@
                                                             <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
                                                         </p>
                                                         <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}"
-                                                            class="btn btn-primary">Lihat Detail</a>
+                                                            class="btn " style="background-color:rgb(189, 107, 48); color: white;" >Lihat Detail</a>
                                                     </div>
                                                 </div>
                                             </div>
