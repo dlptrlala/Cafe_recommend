@@ -39,8 +39,17 @@
             <div class="card p-3">
                 <p><strong>Nama Cafe:</strong> {{ $cafe->namaCafe }}</p>
                 <p><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                <p><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} - Rp {{ number_format($cafe->hargaMax) }}</p>
-                <p><strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}</p>
+                <p class="card-text">
+                    <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} - Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
+                </p>
+                <p class="card-text">
+                    <strong>Jam Operasional:</strong>
+                    @if(date('H:i', strtotime($cafe->jam_buka)) == '00:00' && date('H:i', strtotime($cafe->jam_tutup)) == '00:00')
+                        24 Jam
+                    @else
+                        {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
+                    @endif
+                </p>
                 <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
                 <p>
                     <strong>Kebutuhan:</strong>
