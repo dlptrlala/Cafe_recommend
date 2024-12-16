@@ -72,7 +72,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Daftar Cafe</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('daftarCafe') }}">Daftar Cafe</a></li>
             </ul>
         </div>
         <div class="navbar-icons d-flex align-items-center">
@@ -82,6 +82,28 @@
             </a>
         </div>
     </nav>
+    
+    <!-- Modal Pencarian -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('searchCafe') }}" method="GET">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchModalLabel">Cari Cafe</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="query" class="form-control" placeholder="Masukkan nama atau lokasi cafe..." required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Cari</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Main content area -->
     <div class="container mt-4">
         @yield('content')

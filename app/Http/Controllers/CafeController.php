@@ -15,6 +15,7 @@ class CafeController extends Controller
     {
         return view("home");
     }
+
     public function show($id)
     {
         $cafe = Cafe::with('reviews')->findOrFail($id);
@@ -123,6 +124,7 @@ class CafeController extends Controller
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
+
     public function showHomePage(Request $request)
     {
         $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
@@ -177,5 +179,41 @@ class CafeController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
+    }
+
+    public function daftarCafe()
+    {
+        // Mengambil semua data cafe dari database
+        $cafes = Cafe::all();
+
+        // Mengirim data cafe ke view
+        return view('daftarCafe', compact('cafes'));
+    }
+
+    // public function search(Request $request)
+    // {
+    //     $query = $request->input('query');
+
+    //     // Mencari cafe berdasarkan nama atau lokasi
+    //     $cafes = Cafe::where('namaCafe', 'LIKE', "%$query%")
+    //         ->orWhere('lokasi_area', 'LIKE', "%$query%")
+    //         ->get();
+
+    //     // Mengembalikan hasil pencarian ke view
+    //     return view('search', compact('cafes', 'query'));
+    // }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query'); // Menangkap query pencarian
+
+        // Pencarian berdasarkan nama atau lokasi
+        $cafes = Cafe::where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('namaCafe', 'like', '%' . $query . '%')
+                ->orWhere('lokasi_area', 'like', '%' . $query . '%') // Mencari berdasarkan lokasi
+                ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(kebutuhan, '$.\"$query\"')) = 'true'"); // Mencari berdasarkan kebutuhan
+        })->get();
+
+        return view('search', compact('cafes', 'query'));
     }
 }
