@@ -47,8 +47,6 @@
             /* Jarak antar card ke bawah */
         }
 
-
-
         /* Efek saat hover untuk memperjelas card */
         .card:hover {
             filter: brightness(1.1) drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
@@ -77,20 +75,58 @@
         }
 
 
-        .carousel-control-prev,
-        .carousel-control-next {
+        .carousel-prev,
+        .carousel-next {
             position: absolute;
+            /* Mengatur posisi absolut tombol */
             top: 10%;
+            /* Menempatkan tombol di tengah secara vertikal */
+
             background-color: rgba(0, 0, 0, 0.5);
+            /* Warna latar belakang dengan transparansi */
             border-radius: 50%;
+            /* Membuat tombol bulat */
             color: white;
+            /* Warna ikon tombol */
+            padding: 10px;
+            /* Memberikan padding untuk memperbesar ukuran tombol */
+            z-index: 60;
+            /* Agar tombol berada di atas konten lain */
         }
 
+        .carousel-prev {
+            left: 10px;
+            /* Menggeser tombol ke kiri */
+        }
 
-        .carousel-indicators [data-bs-target] {
-            width: 10px;
-            height: 10px;
+        .carousel-next {
+            right: 10px;
+            /* Menggeser tombol ke kanan */
+        }
+
+        /* Style untuk tombol prev dan next */
+        .cafe-prev,
+        .cafe-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            /* Posisi tombol di tengah vertikal */
             background-color: rgba(0, 0, 0, 0.5);
+            /* Latar belakang transparan */
+            color: white;
+            border-radius: 50%;
+            margin-top: 300px;
+            margin-left: -70px;
+            margin-right: -70px;
+            z-index: 60;
+            filter: invert(100%);
+        }
+
+        /* Pastikan carousel tidak tumpang tindih dengan tombol */
+        #cafeCarousel {
+            position: relative;
+            overflow: hidden;
+            /* Mencegah konten meluap */
         }
 
 
@@ -99,7 +135,44 @@
             /* Lebar container menjadi 80% dari lebar layar */
             max-width: 1200px;
             /* Lebar maksimal container */
+            padding-left: 70px;
+        }
 
+        .filter-card {
+            margin-left: -40px;
+            margin-right: -40px;
+        }
+
+
+        #cafeCarousel {
+            max-width: 1200px;
+            /* Batasi lebar maksimum */
+            margin: 0 auto;
+            /* Pusatkan carousel */
+            overflow: visible;
+        }
+
+        #cafeCarousel .carousel-inner {
+            height: auto;
+            /* Sesuaikan tinggi otomatis */
+            max-height: 800px;
+            /* Batasi tinggi maksimum gambar */
+            max-width:1100px;
+            object-fit: cover;
+            /* Pastikan gambar terpotong proporsional */
+        }
+
+        .container.position-relative {
+            padding: 20px;
+            background-color: #f8f9fa;
+            /* Tambahkan warna latar jika diperlukan */
+            border: 1px solid #ddd;
+            /* Tambahkan batas jika diperlukan */
+            max-width: 1200px;
+            /* Batasi lebar maksimal */
+        }
+        h4{
+            margin-left: 33px;
         }
     </style>
 </head>
@@ -127,12 +200,12 @@
             <img src="images\cafe0.jpg" class="d-block w-100" alt="Image 3">
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+    <button class="carousel-control-prev carousel-prev" type="button" data-bs-target="#cafeCarousel"
         data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+    <button class="carousel-control-next carousel-next" type="button" data-bs-target="#cafeCarousel"
         data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
@@ -200,56 +273,60 @@
         </form>
     </div>
 </div>
-<h3 style="font-size: 25px;">Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h3>
+<h4 style="font-size: 25px;">Daftar Cafe yang Buka di {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:</h4>
 <!-- Hasil Pencarian -->
-<div id="cafeCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <div class="row">
-                @if(isset($cafes) && count($cafes) > 0)
-                            @foreach($cafes as $index => $cafe)
-                                        @if($index % 3 == 0 && $index != 0)
+<div class="container d-flex justify-content-center position-relative">
+    <!-- Carousel -->
+    <div id="cafeCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="row">
+                    @if(isset($cafes) && count($cafes) > 0)
+                                @foreach($cafes as $index => $cafe)
+                                            @if($index % 3 == 0 && $index != 0)
+                                                    </div>
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <div class="row">
+                                            @endif
+                                            <div class="col-md-4">
+                                                <div class="card">
+                                                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
+                                                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                                                        <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                                                        <p class="card-text">
+                                                            <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
+                                                            Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
+                                                        </p>
+                                                        <p class="card-text">
+                                                            <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                                        </p>
+                                                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}"
+                                                            class="btn btn-primary">Lihat Detail</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="carousel-item">
-                                                <div class="row">
-                                        @endif
-                                        <div class="col-md-4">
-                                            <div class="card">
-                                                <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
-                                                <div class="card-body">
-                                                    <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
-                                                    <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                                                    <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                                    <p class="card-text">
-                                                        <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
-                                                        Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
-                                                    </p>
-                                                    <p class="card-text">
-                                                        <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
-                                                    </p>
-                                                    <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn btn-primary">Lihat
-                                                        Detail</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                            @endforeach
-                @else
-                    <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
-                @endif
+                                @endforeach
+                    @else
+                        <p class="text-muted">Tidak ada cafe yang buka pada waktu ini.</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-    <!-- Carousel controls dipindahkan ke luar dari row -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
+    <!-- Carousel controls -->
+    <button class="carousel-control-prev cafe-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#cafeCarousel" data-bs-slide="next">
+    <button class="carousel-control-next cafe-next" type="button" data-bs-target="#cafeCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
 
 
 <!-- Geolocation Script -->
