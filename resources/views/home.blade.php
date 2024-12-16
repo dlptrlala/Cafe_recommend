@@ -282,8 +282,8 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="row">
-                    @if(isset($cafes) && count($cafes) > 0)
-                                @foreach($cafes as $index => $cafe)
+                    @if(isset($cafes_filtered) && count($cafes_filtered) > 0)
+                                @foreach($cafes_filtered as $index => $cafe)
                                             @if($index % 3 == 0 && $index != 0)
                                                     </div>
                                                 </div>
@@ -292,7 +292,8 @@
                                             @endif
                                             <div class="col-md-4">
                                                 <div class="card">
-                                                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->namaCafe }}">
+                                                    <img src="{{ asset('storage/' . $cafe->image_url) }}" class="card-img-top"
+                                                        alt="{{ $cafe->namaCafe }}">
                                                     <div class="card-body">
                                                         <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
 
@@ -327,8 +328,6 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-
-
 
 <!-- Geolocation Script -->
 <script>
