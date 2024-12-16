@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             // $table->id('idReview');
             $table->foreignId('idCafe')->constrained('cafes', 'idCafe')->onDelete('cascade');
-            $table->text('name')->nullable();
-            $table->text('email')->nullable();
+            $table->text('name');
+            $table->text('email');
             $table->decimal('rating')->unsigned(); // Rating dari 1-5
-            $table->text('review')->nullable();
-            $table->timestamps(); // Akan otomatis menyimpan `created_at` dan `updated_at`
+            $table->text('review');
+            $table->timestamp('created_at'); // Kolom hanya untuk created_at
         });
     }
 
