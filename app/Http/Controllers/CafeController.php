@@ -19,19 +19,58 @@ class CafeController extends Controller
     // untuk menampilkan detail cafe
     public function show($id)
     {
-        $cafe = Cafe::with('reviews')->findOrFail($id);
+        $cafe = Cafe::with(['reviews', 'jamOperasionals'])->findOrFail($id);
 
         // Memodifikasi nama cafe untuk setiap cafe
-        foreach ($cafe as $cafes) {
-            $cafes->namaCafe = ucwords(strtolower($cafes->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
-        }
+        $cafe->namaCafe = ucwords(strtolower($cafe->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
         // Menghitung rata-rata rating cafe
         $averageRating = $cafe->reviews->avg('rating');
 
+        // Mendapatkan hari saat ini dalam bahasa Indonesia
+        $hariSekarang = Carbon::now()->locale('id')->dayName;
+
+        // Menyaring jam operasional berdasarkan hari
+        $jamOperasional = [];
+        foreach ($cafe->jamOperasionals as $jam) {
+            if (is_array($jam->jadwal)) {
+                foreach ($jam->jadwal as $item) {
+                    // Periksa apakah hari ini termasuk dalam hari yang ada di jadwal
+                    if (in_array($hariSekarang, $item['hari'])) {
+                        $jamOperasional[] = $item;
+                    }
+                }
+            }
+        }
+
         // Menampilkan detail cafe beserta rata-rata rating
-        return view('detail', compact('cafe', 'averageRating'));
+        return view('detail', compact('cafe', 'averageRating', 'jamOperasional', 'hariSekarang'));
     }
 
+    public function storeReview(Request $request, $id)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'required|string|max:1000',
+        ]);
+
+        // Simpan ulasan ke database
+        $review = new Review();
+        $review->idCafe = $id; // ID cafe yang diulas
+        $review->name = $validatedData['name'];
+        $review->email = $validatedData['email'];
+        $review->rating = $validatedData['rating'];
+        $review->review = $validatedData['review'];
+        $review->created_at = now();
+
+        // Simpan data
+        $review->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Ulasan Anda berhasil disimpan!');
+    }
 
     // Rekomendasi cafe berdasarkan filter langsung ke home2
     public function recommend(Request $request)
@@ -125,25 +164,6 @@ class CafeController extends Controller
         foreach ($cafes as $cafe) {
             $cafe->namaCafe = ucwords(strtolower($cafe->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
         }
-        // // Filter berdasarkan jam buka dan jam tutup
-        // if ($jam_buka || $jam_tutup) {
-        //     $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
-
-        //     $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
-        //         // Jika jam buka dan jam tutup disediakan, pastikan waktu saat ini berada di antaranya
-        //         if ($jam_buka && $jam_tutup) {
-        //             $q->whereTime('jam_buka', '<=', $current_time)
-        //                 ->whereTime('jam_tutup', '>=', $current_time);
-        //         } elseif ($jam_buka) {
-        //             $q->whereTime('jam_buka', '<=', $current_time);
-        //         } elseif ($jam_tutup) {
-        //             $q->whereTime('jam_tutup', '>=', $current_time);
-        //         }
-        //     });
-        // }
-
-        // // Eksekusi query
-        // $cafes = $query->get();
 
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
@@ -239,33 +259,6 @@ class CafeController extends Controller
             return 'dini hari';
         }
     }
-
-    public function storeReview(Request $request, $id)
-    {
-        // Validasi input
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'rating' => 'required|integer|min:1|max:5',
-            'review' => 'required|string|max:1000',
-        ]);
-
-        // Simpan ulasan ke database
-        $review = new Review();
-        $review->idCafe = $id; // ID cafe yang diulas
-        $review->name = $validatedData['name'];
-        $review->email = $validatedData['email'];
-        $review->rating = $validatedData['rating'];
-        $review->review = $validatedData['review'];
-        $review->created_at = now();
-
-        // Simpan data
-        $review->save();
-
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Ulasan Anda berhasil disimpan!');
-    }
-
 
     public function daftarCafe()
     {

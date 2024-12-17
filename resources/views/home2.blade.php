@@ -153,8 +153,6 @@
                                     <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
                                     Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
                                 </p>
-                                <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
-                                    {{$cafe->jam_tutup}}
                                 <p class="card-text">
                                     <strong>Jam Operasional:</strong> 
                                         @if($cafe->jam_buka == '00:00' && $cafe->jam_tutup == '00:00')

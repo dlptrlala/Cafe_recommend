@@ -47,10 +47,22 @@
                 </p>
                 <p class="card-text">
                     <strong>Jam Operasional:</strong>
+<<<<<<< HEAD
                     @if(date('H:i', strtotime($cafe->jam_buka)) == '00:00' && date('H:i', strtotime($cafe->jam_tutup)) == '00:00')
                         24 Jam
                     @else
                         {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
+=======
+                    @if(empty($jamOperasional))
+                        <span>Jam operasional tidak tersedia.</span>
+                    @else
+                        @foreach($jamOperasional as $jam)
+                            <span>{{ $jam['jam_buka'] }} - {{ $jam['jam_tutup'] }}</span>
+                            @if(!$loop->last)
+                                <br>
+                            @endif
+                        @endforeach
+>>>>>>> f2c4c8c391465d0f34af77168dd9944ae47e9e69
                     @endif
                 </p>
                 <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
@@ -103,8 +115,9 @@
                         <label for="rating">Rating:</label>
                         <div class="rating" style="display: flex; gap: 5px;">
                             @for ($i = 1; $i <= 5; $i++)
-                                <input type="radio" name="rating" id="star{{ $i }}" value="{{ $i }}" style="display: none;">
-                                <label for="star{{ $i }}" class="fas fa-star text-muted" onclick="highlightStars({{ $i }})"
+                                <input type="radio" name="rating" id="star{{ $i }}" value="{{ $i }}" style="display: none;"
+                                    onclick="highlightStars({{ $i }})">
+                                <label for="star{{ $i }}" class="fas fa-star text-muted"
                                     style="font-size: 1.5rem; cursor: pointer;">
                                 </label>
                             @endfor
@@ -157,7 +170,11 @@
                                     </p>
                                     <!-- Tanggal Pembuatan -->
                                     <small class="text-muted">
+<<<<<<< HEAD
                                         Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
+=======
+                                        Dibuat pada: {{ \Carbon\Carbon::parse($review->created_at)->format('d M Y H:i') }}
+>>>>>>> f2c4c8c391465d0f34af77168dd9944ae47e9e69
                                     </small>
                                 </div>
                             </div>
@@ -166,5 +183,19 @@
                 @endif
             </div>
         </div>
-
+        <script>
+            function highlightStars(rating) {
+                // Reset semua bintang
+                const stars = document.querySelectorAll('.rating label');
+                stars.forEach((star, index) => {
+                    if (index < rating) {
+                        star.classList.add('text-warning');
+                        star.classList.remove('text-muted');
+                    } else {
+                        star.classList.remove('text-warning');
+                        star.classList.add('text-muted');
+                    }
+                });
+            }
+        </script>
         @endsection
