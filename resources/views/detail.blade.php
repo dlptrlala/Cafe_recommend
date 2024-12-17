@@ -41,6 +41,14 @@
         border-color: rgb(168, 95, 43);
         /* Menyesuaikan border saat hover */
     }
+
+    .card-img-top {
+        width: 100%;
+        height: 320px;
+        /* Sesuaikan dengan ukuran yang diinginkan */
+        object-fit: cover;
+        /* Menjaga proporsi gambar agar tidak terdistorsi */
+    }
 </style>
 
 @section('content')
@@ -51,7 +59,6 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-
                 <img src="{{ asset('profilCafe/' . $cafe->gambarCafe) }}" class="card-img-top" alt="{{ $cafe->name }}">
             </div>
         </div>
