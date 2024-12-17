@@ -32,7 +32,8 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <img src="{{ $cafe->image_url ?? 'https://via.placeholder.com/500x300' }}" class="card-img-top"
+
+                <img src="{{ asset('profilCafe/' . $cafe->gambarCafe) }}" class="card-img-top"
                     alt="{{ $cafe->name }}">
             </div>
         </div>
@@ -47,16 +48,16 @@
                 <p class="card-text">
                     <strong>Jam Operasional:</strong>
                     @if(date('H:i', strtotime($cafe->jam_buka)) == '00:00' && date('H:i', strtotime($cafe->jam_tutup)) == '00:00')
-                        24 Jam
+                    24 Jam
                     @else
-                        {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
+                    {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
                     @endif
                 </p>
                 <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
                 <p>
                     <strong>Kebutuhan:</strong>
                     @foreach(array_keys(array_filter($cafe->kebutuhan)) as $kebutuhan)
-                        <span class="badge badge-info">#{{ strtolower($kebutuhan) }}</span>
+                    <span class="badge badge-info">#{{ strtolower($kebutuhan) }}</span>
                     @endforeach
                 </p>
             </div>
@@ -70,10 +71,10 @@
             <div class="rating">
                 @for ($i = 0; $i < round($averageRating); $i++)
                     <i class="fas fa-star text-warning"></i>
-                @endfor
-                @for ($i = round($averageRating); $i < 5; $i++)
-                    <i class="far fa-star text-warning"></i>
-                @endfor
+                    @endfor
+                    @for ($i = round($averageRating); $i < 5; $i++)
+                        <i class="far fa-star text-warning"></i>
+                        @endfor
             </div>
             <p class="ml-2 mb-0">{{ round($averageRating, 1) }} / 5 - Berdasarkan {{ $cafe->reviews->count() }} ulasan
             </p>
@@ -106,7 +107,7 @@
                                 <label for="star{{ $i }}" class="fas fa-star text-muted" onclick="highlightStars({{ $i }})"
                                     style="font-size: 1.5rem; cursor: pointer;">
                                 </label>
-                            @endfor
+                                @endfor
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,44 +125,44 @@
             <div class="row g-3">
                 <!-- Periksa apakah ada ulasan -->
                 @if ($cafe->reviews->isEmpty())
-                    <div class="col-md-12">
-                        <div class="alert alert-info" role="alert">
-                            Belum ada ulasan untuk cafe ini. Jadilah yang pertama memberikan ulasan!
+                <div class="col-md-12">
+                    <div class="alert alert-info" role="alert">
+                        Belum ada ulasan untuk cafe ini. Jadilah yang pertama memberikan ulasan!
+                    </div>
+                </div>
+                @else
+                @foreach ($cafe->reviews as $review)
+                <div class="col-md-12 mb-3"> <!-- Ulasan dalam satu kolom penuh -->
+                    <div class="card shadow-sm" style="height: auto;">
+                        <div class="card-body">
+                            <!-- Nama, Email, dan Rating -->
+                            <h5 class="card-title d-flex justify-content-between align-items-center"
+                                style="font-size: 1rem;">
+                                <span>
+                                    {{ $review->name }}
+                                    <span class="small text-muted">({{ $review->email }})</span>
+                                </span>
+                                <div class="rating" style="display: flex; gap: 2px;">
+                                    @for ($i = 0; $i < $review->rating; $i++)
+                                        <i class="fas fa-star text-warning"></i>
+                                        @endfor
+                                        @for ($i = $review->rating; $i < 5; $i++)
+                                            <i class="far fa-star text-warning"></i>
+                                            @endfor
+                                </div>
+                            </h5>
+                            <!-- Review -->
+                            <p class="card-text mb-2" style="font-size: 0.9rem;">
+                                {{ $review->review }}
+                            </p>
+                            <!-- Tanggal Pembuatan -->
+                            <small class="text-muted">
+                                Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
+                            </small>
                         </div>
                     </div>
-                @else
-                    @foreach ($cafe->reviews as $review)
-                        <div class="col-md-12 mb-3"> <!-- Ulasan dalam satu kolom penuh -->
-                            <div class="card shadow-sm" style="height: auto;">
-                                <div class="card-body">
-                                    <!-- Nama, Email, dan Rating -->
-                                    <h5 class="card-title d-flex justify-content-between align-items-center"
-                                        style="font-size: 1rem;">
-                                        <span>
-                                            {{ $review->name }}
-                                            <span class="small text-muted">({{ $review->email }})</span>
-                                        </span>
-                                        <div class="rating" style="display: flex; gap: 2px;">
-                                            @for ($i = 0; $i < $review->rating; $i++)
-                                                <i class="fas fa-star text-warning"></i>
-                                            @endfor
-                                            @for ($i = $review->rating; $i < 5; $i++)
-                                                <i class="far fa-star text-warning"></i>
-                                            @endfor
-                                        </div>
-                                    </h5>
-                                    <!-- Review -->
-                                    <p class="card-text mb-2" style="font-size: 0.9rem;">
-                                        {{ $review->review }}
-                                    </p>
-                                    <!-- Tanggal Pembuatan -->
-                                    <small class="text-muted">
-                                        Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                </div>
+                @endforeach
                 @endif
             </div>
         </div>
