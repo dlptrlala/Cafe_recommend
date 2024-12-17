@@ -150,7 +150,7 @@
                                 </p>
                                 <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
                                     {{$cafe->jam_tutup}}
-                                </p>
+                                </p>                              
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
                                     style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
                             </div>
