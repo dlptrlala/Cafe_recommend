@@ -23,11 +23,11 @@ class Review extends Model
     // {
     //     return $this->belongsTo(User::class, 'idUser', 'id');
     // }
-
+    // public $timestamps = false;
     use HasFactory;
 
     protected $table = 'reviews'; // Nama tabel ulasan
     protected $fillable = ['idCafe', 'name', 'email', 'rating', 'review', 'created_at'];
 
-    // public $timestamps = false;
+
 }
