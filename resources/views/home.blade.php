@@ -227,7 +227,7 @@
                     <label for="lokasi" class="form-label">Pilih Lokasi:</label>
                     <select id="lokasi" name="lokasi_area" class="form-select" onchange="handleLocationChange(this)">
                         <option value="" disabled selected>Pilih Lokasi</option>
-                        <option value="geo">Resto Sekitar (Berdasarkan Lokasi Anda)</option>
+                        <option value="geo">Cafe di sekitar Anda</option>
                         <option value="Semua Lokasi">Semua Lokasi</option>
                         <option value="Bantul">Bantul</option>
                         <option value="Gunung Kidul">Gunung Kidul</option>
@@ -278,7 +278,7 @@
 </div>
 
 
-<h4 style="font-size: 25px; text-align: center;">Daftar Cafe yang Buka di
+<h4 style="font-size: 25px; text-align: center;">Cafe yang Buka di
     {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:
 </h4>
 
