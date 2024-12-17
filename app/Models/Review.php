@@ -29,9 +29,5 @@ class Review extends Model
     protected $table = 'reviews'; // Nama tabel ulasan
     protected $fillable = ['idCafe', 'name', 'email', 'rating', 'review', 'created_at'];
 
-<<<<<<< HEAD
-
-=======
     public $timestamps = false;
->>>>>>> f2c4c8c391465d0f34af77168dd9944ae47e9e69
 }

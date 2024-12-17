@@ -47,12 +47,6 @@
                 </p>
                 <p class="card-text">
                     <strong>Jam Operasional:</strong>
-<<<<<<< HEAD
-                    @if(date('H:i', strtotime($cafe->jam_buka)) == '00:00' && date('H:i', strtotime($cafe->jam_tutup)) == '00:00')
-                        24 Jam
-                    @else
-                        {{ date('H:i', strtotime($cafe->jam_buka)) }} - {{ date('H:i', strtotime($cafe->jam_tutup)) }}
-=======
                     @if(empty($jamOperasional))
                         <span>Jam operasional tidak tersedia.</span>
                     @else
@@ -62,7 +56,6 @@
                                 <br>
                             @endif
                         @endforeach
->>>>>>> f2c4c8c391465d0f34af77168dd9944ae47e9e69
                     @endif
                 </p>
                 <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
@@ -170,11 +163,7 @@
                                     </p>
                                     <!-- Tanggal Pembuatan -->
                                     <small class="text-muted">
-<<<<<<< HEAD
-                                        Dibuat pada: {{ $review->created_at->format('d M Y H:i') }}
-=======
                                         Dibuat pada: {{ \Carbon\Carbon::parse($review->created_at)->format('d M Y H:i') }}
->>>>>>> f2c4c8c391465d0f34af77168dd9944ae47e9e69
                                     </small>
                                 </div>
                             </div>
