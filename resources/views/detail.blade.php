@@ -15,13 +15,24 @@
         color: #ccc !important;
         font-size: 30px !important;
         cursor: pointer !important;
-        
+
     }
 
     .rating input[type="radio"]:checked~label,
     .rating label:hover,
     .rating label:hover~label {
         color: gold !important;
+    }
+    .btn-custom {
+        background-color: rgb(189, 107, 48) !important; /* Warna latar belakang */
+        color: white !important; /* Warna teks */
+        border: 2px solid rgb(189, 107, 48); /* Menambahkan border */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan pada tombol */
+    }
+
+    .btn-custom:hover {
+        background-color: rgb(168, 95, 43) !important; /* Warna saat hover */
+        border-color: rgb(168, 95, 43); /* Menyesuaikan border saat hover */
     }
 </style>
 
@@ -121,7 +132,7 @@
                         <textarea name="review" id="review" rows="5" class="form-control"
                             placeholder="Tulis ulasan Anda" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Kirim Ulasan</button>
+                    <button type="submit" class="btn btn-custom btn-block">Kirim Ulasan</button>
                 </form>
             </div>
         </div>
