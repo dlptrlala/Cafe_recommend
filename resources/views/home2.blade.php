@@ -1,8 +1,10 @@
 @extends('layout.navbar')
 
 <head>
-    <title>Home 2</title>
+    <title>Rekomendasi Cafe</title>
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
 </head>
+
 <style>
     .form-group {
         margin-bottom: 20px;

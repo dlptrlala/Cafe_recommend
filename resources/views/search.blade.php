@@ -1,6 +1,13 @@
 @extends('layout.navbar')
 
 @section('content')
+
+<head>
+    <title>Rekomendasi Cafe</title>
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+</head>
+
+
 <style>
     .badge-custom {
         background-color: rgb(0, 0, 0);
