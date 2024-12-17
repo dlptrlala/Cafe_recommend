@@ -27,7 +27,7 @@ class Review extends Model
     use HasFactory;
 
     protected $table = 'reviews'; // Nama tabel ulasan
-    protected $fillable = ['idCafe', 'name', 'email', 'rating', 'review', 'created_at', 'updated_at'];
+    protected $fillable = ['idCafe', 'name', 'email', 'rating', 'review', 'created_at'];
 
     // public $timestamps = false;
 }

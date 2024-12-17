@@ -134,32 +134,33 @@
         <div class="col-md-9">
             <div class="search-results mt-4">
                 @if(isset($cafes) && count($cafes) > 0)
-                    <h3 style="margin-top: -5px;">Hasil Pencarian:</h3>
-                    <div class="row mb-3">
-                        @foreach($cafes as $cafe)
-                            <div class="col-md-4" style="margin-bottom: 20px">
-                                <div class="card h-100 d-flex flex-column"> <!-- Tambahkan d-flex dan flex-column -->
-                                    <img src="{{ $cafe->image_url }}" class="card-img-top" alt="{{ $cafe->name }}"
-                                        style="height: 200px; object-fit: cover;">
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
-                                        <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
-                                        <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                        <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
-                                            {{ number_format($cafe->hargaMax) }}
-                                        </p>
-                                        <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
-                                            {{$cafe->jam_tutup}}</p>
-                                        <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
-                                            style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
-                                    </div>
-                                </div>
-
+                <h3 style="margin-top: -5px;">Hasil Pencarian:</h3>
+                <div class="row mb-3">
+                    @foreach($cafes as $cafe)
+                    <div class="col-md-4" style="margin-bottom: 20px">
+                        <div class="card h-100 d-flex flex-column"> <!-- Tambahkan d-flex dan flex-column -->
+                            <img src="{{ asset('profilCafe/' . $cafe->gambarCafe) }}" class="card-img-top" alt="{{ $cafe->namaCafe }}"
+                                style="height: 200px; object-fit: cover;">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                                <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
+                                <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
+                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
+                                    {{ number_format($cafe->hargaMax) }}
+                                </p>
+                                <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
+                                    {{$cafe->jam_tutup}}
+                                </p>
+                                <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
+                                    style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
                             </div>
-                        @endforeach
+                        </div>
+
                     </div>
+                    @endforeach
+                </div>
                 @else
-                    <p>Tidak ada cafe yang ditemukan sesuai dengan filter yang Anda pilih.</p>
+                <p>Tidak ada cafe yang ditemukan sesuai dengan filter yang Anda pilih.</p>
                 @endif
             </div>
         </div>
@@ -174,12 +175,12 @@
             // Mendapatkan geolokasi pengguna
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    function (position) {
+                    function(position) {
                         document.getElementById("longitude").value = position.coords.longitude;
                         document.getElementById("latitude").value = position.coords.latitude;
                         alert("Lokasi Anda berhasil didapatkan! Klik 'Cari Cafe' untuk melanjutkan.");
                     },
-                    function (error) {
+                    function(error) {
                         alert("Gagal mendapatkan lokasi. Pastikan Anda mengizinkan akses lokasi.");
                     }
                 );

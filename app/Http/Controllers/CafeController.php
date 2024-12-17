@@ -89,17 +89,6 @@ class CafeController extends Controller
                 ->orderBy('distance', 'asc');
         }
 
-        // // Filter berdasarkan jam buka dan jam tutup
-        // if ($jam_buka && $jam_tutup) {
-        //     $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
-
-        //     // Memastikan waktu saat ini berada dalam rentang jam buka dan tutup
-        //     $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
-        //         $q->whereTime('jam_buka', '<=', $current_time)
-        //             ->whereTime('jam_tutup', '>=', $current_time);
-        //     });
-        // }
-
         // Filter berdasarkan jam buka dan jam tutup
         if ($jam_buka || $jam_tutup) {
             $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
@@ -123,6 +112,7 @@ class CafeController extends Controller
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
+
     public function showHomePage(Request $request)
     {
         // Mendapatkan hari saat ini
@@ -193,29 +183,6 @@ class CafeController extends Controller
     }
 
 
-
-    // public function showHomePage(Request $request)
-    // {
-    //     $time_context = $this->getTimeContext(); // Fungsi untuk menentukan konteks waktu
-    //     $cafes = Cafe::all(); // Contoh data cafe
-    //     return view('home', compact('time_context', 'cafes'));
-    // }
-
-    // public function recommendByTimeContext()
-    // {
-    //     $time_context = $this->getTimeContext(); // Mendapatkan konteks waktu
-    //     $current_time = now()->format('H:i:s'); // Waktu saat ini dengan format 24 jam (08:00:00)
-
-    //     // Query cafe yang buka sesuai waktu saat ini
-    //     $cafes = Cafe::whereTime('jam_buka', '<=', $current_time)
-    //         ->whereTime('jam_tutup', '>=', $current_time)
-    //         ->orderBy('jam_buka', 'asc')  // Urutkan berdasarkan jam buka
-    //         ->get();
-
-    //     // Kirim data cafe dan waktu ke view 'home'
-    //     return view('home', compact('time_context', 'cafes'));
-    // }
-
     // Method untuk menentukan konteks waktu
     private function getTimeContext()
     {
@@ -224,33 +191,12 @@ class CafeController extends Controller
             return 'pagi';
         } elseif ($hour >= 12 && $hour < 18) {
             return 'siang';
-        } elseif ($hour >= 18 && $hour < 22) {
+        } elseif ($hour >= 18 && $hour < 23) {
             return 'malam';
         } else {
             return 'dini hari';
         }
     }
-
-
-    // public function storeReview(Request $request, $id)
-    // {
-    //     $validated = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|max:255',
-    //         'rating' => 'required|integer|min:1|max:5',
-    //         'review' => 'required|string',
-    //     ]);
-
-    //     Review::create([
-    //         'idCafe' => $id,
-    //         'name' => $validated['name'],
-    //         'email' => $validated['email'],
-    //         'rating' => $validated['rating'],
-    //         'review' => $validated['review'],
-    //     ]);
-
-    //     return redirect()->back()->with('success', 'Ulasan berhasil ditambahkan!');
-    // }
 
 
     public function storeReview(Request $request, $id)
@@ -289,18 +235,6 @@ class CafeController extends Controller
         return view('daftarCafe', compact('cafes'));
     }
 
-    // public function search(Request $request)
-    // {
-    //     $query = $request->input('query');
-
-    //     // Mencari cafe berdasarkan nama atau lokasi
-    //     $cafes = Cafe::where('namaCafe', 'LIKE', "%$query%")
-    //         ->orWhere('lokasi_area', 'LIKE', "%$query%")
-    //         ->get();
-
-    //     // Mengembalikan hasil pencarian ke view
-    //     return view('search', compact('cafes', 'query'));
-    // }
 
     public function search(Request $request)
     {

@@ -281,6 +281,8 @@
 <h4 style="font-size: 25px; text-align: center;">Daftar Cafe yang Buka di
     {{ ucfirst($time_context ?? 'waktu tidak diketahui') }} Hari:
 </h4>
+
+
 <!-- Hasil Pencarian -->
 <div class="container d-flex justify-content-center position-relative">
     <!-- Carousel -->
@@ -298,7 +300,8 @@
                     @endif
                     <div class="col-md-4">
                         <div class="card card h-100">
-                            <img src="{{ asset('storage/' . $cafe->image_url) }}" class="card-img-top"
+                            <img src="{{ asset('profilCafe/' . $cafe->image_url) }}"
+                                class="card-img-top"
                                 alt="{{ $cafe->namaCafe }}">
                             <div class="card-body">
                                 <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
@@ -324,6 +327,8 @@
             </div>
         </div>
     </div>
+
+
     <!-- Carousel controls -->
     <button class="carousel-control-prev cafe-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>

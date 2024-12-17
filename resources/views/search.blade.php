@@ -20,7 +20,7 @@
         @foreach($cafes as $cafe)
         <div class="col-md-4 mb-4">
             <div class="card">
-                <img src="{{ asset('storage/' . $cafe->gambarCafe) }}" class="card-img-top" alt="{{ $cafe->namaCafe }}" style="height: 200px; object-fit: cover;">
+                <img src="{{ asset('profilCafe/' . $cafe->gambarCafe) }}" class="card-img-top" alt="{{ $cafe->namaCafe }}" style="height: 200px; object-fit: cover;">          
                 <div class="card-body">
                     <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
                     <p class="card-text">
