@@ -155,6 +155,15 @@
                                 </p>
                                 <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
                                     {{$cafe->jam_tutup}}
+                                <p class="card-text">
+                                    <strong>Jam Operasional:</strong> 
+                                        @if($cafe->jam_buka == '00:00' && $cafe->jam_tutup == '00:00')
+                                            BUKA 24 jam
+                                        @elseif($cafe->jam_buka === null || $cafe->jam_tutup === null)
+                                            Tutup
+                                        @else
+                                            {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
+                                        @endif
                                 </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
                                     style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
