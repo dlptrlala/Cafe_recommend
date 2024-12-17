@@ -262,7 +262,7 @@
                         <option value="" disabled selected>Pilih Kebutuhan</option>
                         <option value="kerja">Kerja</option>
                         <option value="nongkrong">Nongkrong</option>
-                        <option value="tugas">Tugas</option>
+                        <option value="tugas">Nugas</option>
                         <option value="rapat">Rapat</option>
                     </select>
                 </div>
