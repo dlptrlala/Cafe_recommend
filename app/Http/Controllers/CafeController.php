@@ -121,7 +121,7 @@ class CafeController extends Controller
         if ($kebutuhan) {
             $query->where("kebutuhan->$kebutuhan", true);
         }
-
+        
         // Filter berdasarkan geolokasi (jika ada)
         if ($longitude && $latitude) {
             $radius = 5000; // Radius pencarian dalam meter (5 km)
