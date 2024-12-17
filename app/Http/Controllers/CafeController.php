@@ -21,6 +21,10 @@ class CafeController extends Controller
     {
         $cafe = Cafe::with('reviews')->findOrFail($id);
 
+        // Memodifikasi nama cafe untuk setiap cafe
+        foreach ($cafe as $cafes) {
+            $cafes->namaCafe = ucwords(strtolower($cafes->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
+        }
         // Menghitung rata-rata rating cafe
         $averageRating = $cafe->reviews->avg('rating');
 
@@ -93,30 +97,34 @@ class CafeController extends Controller
                 ->orderBy('distance', 'asc');
         }
         // Filter berdasarkan jam buka dan jam tutup
-       // Ambil data cafe
-    $cafes = $query->get();
+        // Ambil data cafe
+        $cafes = $query->get();
 
-    // Tambahkan jam operasional berdasarkan hari ini
-    $hari_ini = now()->locale('id')->isoFormat('dddd'); // Hari ini dalam format nama hari
+        // Tambahkan jam operasional berdasarkan hari ini
+        $hari_ini = now()->locale('id')->isoFormat('dddd'); // Hari ini dalam format nama hari
 
-    foreach ($cafes as $cafe) {
-        $jam_operasional = json_decode($cafe->jadwal, true); // Decode JSON jadwal
-        $jam_buka = 'Tidak tersedia';
-        $jam_tutup = 'Tidak tersedia';
+        foreach ($cafes as $cafe) {
+            $jam_operasional = json_decode($cafe->jadwal, true); // Decode JSON jadwal
+            $jam_buka = 'Tidak tersedia';
+            $jam_tutup = 'Tidak tersedia';
 
-        // Loop untuk mencari jam buka dan tutup berdasarkan hari ini
-        foreach ($jam_operasional as $operasional) {
-            if (in_array($hari_ini, $operasional['hari'])) {
-                $jam_buka = $operasional['jam_buka'];
-                $jam_tutup = $operasional['jam_tutup'];
-                break;
+            // Loop untuk mencari jam buka dan tutup berdasarkan hari ini
+            foreach ($jam_operasional as $operasional) {
+                if (in_array($hari_ini, $operasional['hari'])) {
+                    $jam_buka = $operasional['jam_buka'];
+                    $jam_tutup = $operasional['jam_tutup'];
+                    break;
+                }
             }
-        }
 
-        // Menyimpan jam operasional dalam objek cafe
-        $cafe->jam_buka = $jam_buka;
-        $cafe->jam_tutup = $jam_tutup;
-    }
+            // Menyimpan jam operasional dalam objek cafe
+            $cafe->jam_buka = $jam_buka;
+            $cafe->jam_tutup = $jam_tutup;
+        }
+        // Memodifikasi nama cafe untuk setiap cafe
+        foreach ($cafes as $cafe) {
+            $cafe->namaCafe = ucwords(strtolower($cafe->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
+        }
         // // Filter berdasarkan jam buka dan jam tutup
         // if ($jam_buka || $jam_tutup) {
         //     $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
@@ -168,6 +176,10 @@ class CafeController extends Controller
             ->distinct() // Menghindari duplikasi
             ->get();
 
+        // Memodifikasi nama cafe untuk setiap cafe
+        foreach ($cafes as $cafe) {
+            $cafe->namaCafe = ucwords(strtolower($cafe->namaCafe)); // Ubah nama cafe menjadi kapital di awal setiap kata
+        }
         return view('home', compact('time_context', 'cafes'));
     }
 
