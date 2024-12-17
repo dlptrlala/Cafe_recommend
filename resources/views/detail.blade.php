@@ -23,16 +23,23 @@
     .rating label:hover~label {
         color: gold !important;
     }
+
     .btn-custom {
-        background-color: rgb(189, 107, 48) !important; /* Warna latar belakang */
-        color: white !important; /* Warna teks */
-        border: 2px solid rgb(189, 107, 48); /* Menambahkan border */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan pada tombol */
+        background-color: rgb(189, 107, 48) !important;
+        /* Warna latar belakang */
+        color: white !important;
+        /* Warna teks */
+        border: 2px solid rgb(189, 107, 48);
+        /* Menambahkan border */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Menambahkan bayangan pada tombol */
     }
 
     .btn-custom:hover {
-        background-color: rgb(168, 95, 43) !important; /* Warna saat hover */
-        border-color: rgb(168, 95, 43); /* Menyesuaikan border saat hover */
+        background-color: rgb(168, 95, 43) !important;
+        /* Warna saat hover */
+        border-color: rgb(168, 95, 43);
+        /* Menyesuaikan border saat hover */
     }
 </style>
 
@@ -70,10 +77,11 @@
                     @endif
                 </p>
                 <p><strong>Deskripsi:</strong> {{ $cafe->deskripsi }}</p>
-                <p>
-                    <strong>Kebutuhan:</strong>
+                <p><strong>Kebutuhan:</strong>
                     @foreach(array_keys(array_filter($cafe->kebutuhan)) as $kebutuhan)
-                        <span class="badge badge-info">#{{ strtolower($kebutuhan) }}</span>
+                        <a href="{{ route('searchCafe') }}?query={{ strtolower($kebutuhan) }}" class="badge badge-info">
+                            #{{ strtolower($kebutuhan) }}
+                        </a>
                     @endforeach
                 </p>
             </div>
