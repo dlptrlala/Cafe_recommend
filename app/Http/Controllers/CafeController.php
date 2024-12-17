@@ -16,6 +16,7 @@ class CafeController extends Controller
         return view("home");
     }
 
+    // untuk menampilkan detail cafe
     public function show($id)
     {
         $cafe = Cafe::with('reviews')->findOrFail($id);
@@ -28,7 +29,7 @@ class CafeController extends Controller
     }
 
 
-    // Rekomendasi cafe berdasarkan filter
+    // Rekomendasi cafe berdasarkan filter langsung ke home2
     public function recommend(Request $request)
     {
         // Validasi input dari user
@@ -54,7 +55,10 @@ class CafeController extends Controller
         $jam_tutup = $validated['jam_tutup'] ?? null;
 
         // Query dasar
-        $query = Cafe::query();
+        // $query = Cafe::query();
+        $query = Cafe::query()
+            ->leftJoin('jam_operasionals', 'cafes.idCafe', '=', 'jam_operasionals.idCafe')
+            ->select('cafes.*', 'jam_operasionals.jadwal');
 
         // Filter berdasarkan lokasi area (kecuali "Semua Lokasi")
         if ($lokasi_area && $lokasi_area !== "Semua Lokasi" && $lokasi_area !== "geo") {
@@ -88,31 +92,56 @@ class CafeController extends Controller
                 ->having('distance', '<=', $radius)
                 ->orderBy('distance', 'asc');
         }
-
         // Filter berdasarkan jam buka dan jam tutup
-        if ($jam_buka || $jam_tutup) {
-            $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
+       // Ambil data cafe
+    $cafes = $query->get();
 
-            $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
-                // Jika jam buka dan jam tutup disediakan, pastikan waktu saat ini berada di antaranya
-                if ($jam_buka && $jam_tutup) {
-                    $q->whereTime('jam_buka', '<=', $current_time)
-                        ->whereTime('jam_tutup', '>=', $current_time);
-                } elseif ($jam_buka) {
-                    $q->whereTime('jam_buka', '<=', $current_time);
-                } elseif ($jam_tutup) {
-                    $q->whereTime('jam_tutup', '>=', $current_time);
-                }
-            });
+    // Tambahkan jam operasional berdasarkan hari ini
+    $hari_ini = now()->locale('id')->isoFormat('dddd'); // Hari ini dalam format nama hari
+
+    foreach ($cafes as $cafe) {
+        $jam_operasional = json_decode($cafe->jadwal, true); // Decode JSON jadwal
+        $jam_buka = 'Tidak tersedia';
+        $jam_tutup = 'Tidak tersedia';
+
+        // Loop untuk mencari jam buka dan tutup berdasarkan hari ini
+        foreach ($jam_operasional as $operasional) {
+            if (in_array($hari_ini, $operasional['hari'])) {
+                $jam_buka = $operasional['jam_buka'];
+                $jam_tutup = $operasional['jam_tutup'];
+                break;
+            }
         }
 
-        // Eksekusi query
-        $cafes = $query->get();
+        // Menyimpan jam operasional dalam objek cafe
+        $cafe->jam_buka = $jam_buka;
+        $cafe->jam_tutup = $jam_tutup;
+    }
+        // // Filter berdasarkan jam buka dan jam tutup
+        // if ($jam_buka || $jam_tutup) {
+        //     $current_time = now()->format('H:i'); // Waktu saat ini dalam format H:i
+
+        //     $query->where(function ($q) use ($jam_buka, $jam_tutup, $current_time) {
+        //         // Jika jam buka dan jam tutup disediakan, pastikan waktu saat ini berada di antaranya
+        //         if ($jam_buka && $jam_tutup) {
+        //             $q->whereTime('jam_buka', '<=', $current_time)
+        //                 ->whereTime('jam_tutup', '>=', $current_time);
+        //         } elseif ($jam_buka) {
+        //             $q->whereTime('jam_buka', '<=', $current_time);
+        //         } elseif ($jam_tutup) {
+        //             $q->whereTime('jam_tutup', '>=', $current_time);
+        //         }
+        //     });
+        // }
+
+        // // Eksekusi query
+        // $cafes = $query->get();
 
         // Kembalikan data ke view
         return view('home2', compact('cafes'));
     }
 
+    // menampilkan context aware di home
     public function showHomePage(Request $request)
     {
         // Mendapatkan hari saat ini
@@ -142,6 +171,7 @@ class CafeController extends Controller
         return view('home', compact('time_context', 'cafes'));
     }
 
+    // untuk merekomendasi context aware
     public function recommendByTimeContext()
     {
         // Mendapatkan hari saat ini
@@ -197,7 +227,6 @@ class CafeController extends Controller
             return 'dini hari';
         }
     }
-
 
     public function storeReview(Request $request, $id)
     {

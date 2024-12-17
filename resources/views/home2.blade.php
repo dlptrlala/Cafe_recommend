@@ -66,19 +66,20 @@
                     <div class="form-group">
                         <label for="harga_min">Harga Min:</label>
                         <input type="number" name="harga_min" id="harga_min" class="form-control"
-                            placeholder="Harga Min" min="0" value="0">
+                            placeholder="Min" min="0">
                     </div>
 
                     <div class="form-group">
                         <label for="harga_max">Harga Max:</label>
                         <input type="number" name="harga_max" id="harga_max" class="form-control"
-                            placeholder="Harga Max" min="0" value="100000">
+                            placeholder="Max" min="0">
                     </div>
 
                     <!-- Kebutuhan -->
                     <div class="form-group">
                         <label for="kebutuhan">Kebutuhan:</label>
                         <select name="kebutuhan" id="kebutuhan" class="form-control">
+                            <option value="" disabled selected>Pilih Kebutuhan</option>
                             <option value="kerja">Kerja</option>
                             <option value="nongkrong">Nongkrong</option>
                             <option value="tugas">Tugas</option>
@@ -89,6 +90,7 @@
                     <div class="form-group">
                         <label for="pilihWaktu">Pilih Waktu:</label>
                         <select name="pilihWaktu" id="pilihWaktu" class="form-control" onchange="toggleJamInput()">
+                            <option value="" disabled selected>Pilih Waktu</option>
                             <option value="sekarang">Waktu Saat Ini</option>
                             <option value="pilihJam">Pilih Jam</option>
                         </select>
@@ -142,14 +144,15 @@
                             <img src="{{ asset('profilCafe/' . $cafe->gambarCafe) }}" class="card-img-top" alt="{{ $cafe->namaCafe }}"
                                 style="height: 200px; object-fit: cover;">
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $cafe->namaCafe }}</h5>
+                                <h5 class="card-title"><strong>{{ $cafe->namaCafe }}</strong></h5>
                                 <p class="card-text">{{ $cafe->deskripsiCafe }}</p>
                                 <p class="card-text"><strong>Alamat:</strong> {{ $cafe->alamatCafe }}</p>
-                                <p class="card-text"><strong>Harga:</strong> Rp {{ number_format($cafe->hargaMin) }} -
-                                    {{ number_format($cafe->hargaMax) }}
+                                <p class="card-text">
+                                    <strong>Harga:</strong> Rp{{ number_format($cafe->hargaMin, 0, ',', '.') }} -
+                                    Rp{{ number_format($cafe->hargaMax, 0, ',', '.') }}
                                 </p>
-                                <p class="card-text"><strong>Jam Operasional:</strong> {{$cafe->jam_buka}} -
-                                    {{$cafe->jam_tutup}}
+                                <p class="card-text">
+                                    <strong>Jam Operasional:</strong> {{ $cafe->jam_buka }} - {{ $cafe->jam_tutup }}
                                 </p>
                                 <a href="{{ route('cafe.details', ['id' => $cafe->idCafe]) }}" class="btn mt-auto"
                                     style="background-color:rgb(189, 107, 48); color: white;">Lihat Detail</a>
